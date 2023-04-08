@@ -5,6 +5,8 @@ module.exports=(req,res,nxt)=>{
     if(valid){
         nxt();
     }else{
+        //test-----
+        console.log(req.body);
         res.status(403).send("forbidden comand");
     }
 }

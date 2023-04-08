@@ -19,7 +19,7 @@ const getAllPatientAppointments=async(req,res)=>{
 
 const getAllClinickAppointmentsByClinickId=async(req,res)=>{
     try{
-        const appointments=await Appointment.find({clinick:req.params.clinickId}).exec();
+        const appointments=await Appointment.find({clinick:req.params.clinicId}).exec();
         if(appointments.length==0){
             return res.status(200).json({message:"No appointments was added yet"});
         }

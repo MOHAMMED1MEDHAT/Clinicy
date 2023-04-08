@@ -12,18 +12,18 @@ const appointmentSchema=mongoose.Schema({
         required:true
     },
     appointmentDate:{
-        type:Date,
+        type:String,
         required:true,
     },
     report:{
         type:String,
     },
     bookingTime:{
-        type:Date,
+        type:String,
         required:true
     },
     status:{
-        type:"string",
+        type:String,
         default:"PENDING",
         required:true
     },
