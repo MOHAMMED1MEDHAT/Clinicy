@@ -34,6 +34,9 @@ const app=express();
 //-------------------
 
 
+process.on("uncaughtException",(exception)=>{console.log("uncaught Exception");});
+process.on("unhandledRejection",(exception)=>{console.log("uncaught async Exception");});
+
 mongoose.connect("mongodb://127.0.0.1:27017/clinicky").then(()=>{
     console.log('Connected to db');
 }).catch((err) => console.log("error occured"));
