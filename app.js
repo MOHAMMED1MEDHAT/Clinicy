@@ -46,7 +46,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/clinicky").then(()=>{
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use("/api/user/signUp",userRouter);//test done
-app.use("/api/user/login",authRouter);//test done
+app.use("/api/user",authRouter);//test done
 app.use("/api/search",searchRouter);//test done
 app.use("/api/profile",profileRouter);//test done
 // app.use("/api/mainPage",mainPageRouter);

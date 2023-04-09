@@ -6,7 +6,7 @@ const Doctor=require("../models/doctorModel")
 const bcrypt=require("bcrypt");
 const router=require("express").Router();
 
-router.post("/",validator,async(req,res)=>{
+router.post("/login",validator,async(req,res)=>{
     try{
         if(req.body.type.toUpperCase()==="PATIENT"){
             let patient=await Patient.findOne({email:req.body.email}).exec();
@@ -46,5 +46,19 @@ router.post("/",validator,async(req,res)=>{
         res.status(500).json({message:"Internal server error"});
     }
 });
+
+router.get("/logout",async(req,res)=>{
+    try{
+            res.cookie("x-auth-token","",{httpOnly:true});
+            res.status(200).json({message:"loged out successfully..."});
+        //test---------------
+        // console.log(req.body.type.toUpperCase());
+        //--------------------------
+    }catch(err){
+        console.log(err);
+        res.status(500).json({message:"Internal server error"});
+    }
+});
+
 
 module.exports=router;
