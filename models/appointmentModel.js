@@ -4,11 +4,13 @@ const mongoose=require('mongoose');
 
 const appointmentSchema=mongoose.Schema({
     patient:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"patients",
         required:true,
     },
     clinick:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"clinics",
         required:true
     },
     appointmentDate:{

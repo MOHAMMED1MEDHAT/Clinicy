@@ -1,3 +1,5 @@
+require("dotenv").config({path:__dirname+"/.env"});
+
 const userRouter=require("./routes/user")
 const authRouter=require("./routes/auth")
 const searchRouter=require("./routes/search")
@@ -8,6 +10,7 @@ const clinickRouter=require("./routes/clinick")
 
 const mongoose=require("mongoose");
 // const bodyParser=require("body-parser")
+const cors=require("cors");
 const express=require("express");
 const app=express();
 
@@ -15,7 +18,7 @@ const app=express();
 // const { MongoClient } = require("mongodb");
 
 // // Replace the following with your Atlas connection string
-// const url = "mongodb+srv://admin:5eDunuda0guvOPST@cluster0.w82mk22.mongodb.net/?retryWrites=true&w=majority";
+// const url = "mongodb+srv://admin:5eDunuda0guvOPST@cluster0.w82mk22.mongodb.net/clincky?retryWrites=true&w=majority";
 // const client = new MongoClient(url);
 
 // async function run() {
@@ -34,17 +37,23 @@ const app=express();
 //-------------------
 
 
-process.on("uncaughtException",(exception)=>{console.log("uncaught Exception");});
-process.on("unhandledRejection",(exception)=>{console.log("uncaught async Exception");});
+process.on("uncaughtException",(exception)=>{console.log("uncaught Exception"+exception);});
+process.on("unhandledRejection",(exception)=>{console.log("uncaught async Exception"+exception);});
 
-mongoose.connect("mongodb://127.0.0.1:27017/clinicky").then(()=>{
+mongoose.connect(process.env.LOCAl_CONNECTION_STRING,{
+    useNewUrlParser:true,
+    useUnifiedTopology:true,
+    dbName:"Clincky"
+}).then(()=>{
     console.log('Connected to db');
-}).catch((err) => console.log("error occured"));
-//mongodb+srv://admin:5eDunuda0guvOPST@cluster0.w82mk22.mongodb.net/?retryWrites=true&w=majority
+}).catch((err) => console.log("error occured"+err));
+//mongodb+srv://admin:@cluster0.w82mk22.mongodb.net/?retryWrites=true&w=majority
 //mongodb://127.0.0.1:27017/clinicky
 
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
+app.use(cors());
+app.optine("*",cors);
 app.use("/api/user/signUp",userRouter);//test done
 app.use("/api/user",authRouter);//test done
 app.use("/api/search",searchRouter);//test done

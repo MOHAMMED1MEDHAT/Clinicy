@@ -4,7 +4,8 @@ const mongoose=require('mongoose');
 
 const clinickSchema=mongoose.Schema({
     doctor:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"doctors",
         required:true,
     },
     phone:{
