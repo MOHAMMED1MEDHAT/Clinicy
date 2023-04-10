@@ -1,6 +1,9 @@
 const Clinick=require("../models/clinickModule");
 
 const jwt =require("jsonwebtoken");
+const config=require("config")
+const jwtSCRT=config.get("env_var.jwtScreteKey")
+
 
 //with doctorId as params
 // const getAllClinicks=async(req,res)=>{
@@ -20,7 +23,7 @@ const jwt =require("jsonwebtoken");
 const getAllClinicks=async(req,res)=>{
     try{
         //replcable with /:id of the user
-        const tokenPayload=jwt.verify(req.header("x-auth-token"),"thisthesecrettokenkey");
+        const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
         if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
             let clinicks=await Clinick.find({doctor:tokenPayload.userId}).exec();
             if(clinicks.length==0){
@@ -28,7 +31,7 @@ const getAllClinicks=async(req,res)=>{
             }
             res.status(200).json({clinicks});
         }else{
-            return res.status(400).json({message:"UNAUTHORIZED ACTION"})
+            return res.status(401).json({message:"UNAUTHORIZED ACTION"})
         }
     }catch(err){
         console.log(err);
@@ -53,7 +56,7 @@ const getClinickById=async(req,res)=>{
 const addClinick=async(req,res)=>{
     try{
         //replcable with /:id of the user
-        const tokenPayload=jwt.verify(req.header("x-auth-token"),"thisthesecrettokenkey");
+        const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
 
         const {phone,location,specialization,price,openDates,rating}=req.body;
 

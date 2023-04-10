@@ -1,10 +1,12 @@
 const Appointment=require("../models/appointmentModel");
-const jwt=require("jsonwebtoken")
 
+const jwt=require("jsonwebtoken")
+const config=require("config")
+const jwtSCRT=config.get("env_var.jwtScreteKey")
 
 const getAllPatientAppointments=async(req,res)=>{
     //replcable with /:id of the uesr
-    const tokenPayload=jwt.verify(req.header("x-auth-token"),"thisthesecrettokenkey");
+    const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
     try{
         const appointments=await Appointment.find({patient:tokenPayload.userId}).exec();
         if(appointments.length==0){

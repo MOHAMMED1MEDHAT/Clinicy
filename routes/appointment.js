@@ -3,9 +3,9 @@ const appointment=require("../controller/appointmentController");
 
 const router=require("express").Router();
 
-router.get("/patient/all",appointment.getAllPatientAppointments);
+router.get("/patient",appointment.getAllPatientAppointments);
 
-router.get("/clinic/all/:clinicId",appointment.getAllClinickAppointmentsByClinickId);
+router.get("/clinic/:clinicId",appointment.getAllClinickAppointmentsByClinickId);
 
 router.get("/:appointmentId",appointment.getAppointmentById);
 

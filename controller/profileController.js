@@ -1,13 +1,16 @@
 // const User=require("../models/userModel");
 const Patient=require("../models/patientModel");
 const Doctor=require("../models/doctorModel");
+
 const jwt=require("jsonwebtoken");
+const config=require("config")
+const jwtSCRT=config.get("env_var.jwtScreteKey")
 
 
 const getUserData=async(req,res)=>{
     try{
         //replcable with /:id
-        const tokenPayload=jwt.verify(req.header("x-auth-token"),"thisthesecrettokenkey");
+        const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
         //test---------
         // console.log(tokenPayload)
         //----------------------------
@@ -35,7 +38,7 @@ const getUserData=async(req,res)=>{
 const updateUserData=async(req,res)=>{
     try{
         //replcable with /:id
-        const tokenPayload=jwt.verify(req.header("x-auth-token"),"thisthesecrettokenkey");
+        const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
         if(tokenPayload.userType.toUpperCase()==="PATIENT"){
             let patient=await Patient.findByIdAndUpdate(tokenPayload.userId,{
                 name:req.body.name,
@@ -66,7 +69,7 @@ const updateUserData=async(req,res)=>{
 const deleteUserData=async(req,res)=>{
     try{
         //replcable with /:id
-        const tokenPayload=jwt.verify(req.header("x-auth-token"),"thisthesecrettokenkey");
+        const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
         if(tokenPayload.userType.toUpperCase()==="PATIENT"){
             let patient=await Patient.findByIdAndDelete(tokenPayload.userId).exec();
             if(!patient){

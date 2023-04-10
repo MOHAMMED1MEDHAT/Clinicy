@@ -4,7 +4,7 @@ const clinick=require("../controller/clinickController");
 const router=require("express").Router();
 
 // router.get("/all/:doctorId",clinick.getAllClinicks)
-router.get("/all/",clinick.getAllClinicks)
+router.get("/",clinick.getAllClinicks)
 
 router.get("/:id",clinick.getClinickById);
 
