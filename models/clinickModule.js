@@ -38,4 +38,4 @@ const clinickSchema=mongoose.Schema({
     }
 });
 
-module.exports =mongoose.model("clinicks", clinickSchema);
+module.exports =mongoose.model("clinick", clinickSchema);

@@ -8,7 +8,10 @@ const getAllPatientAppointments=async(req,res)=>{
     //replcable with /:id of the uesr
     const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
     try{
-        const appointments=await Appointment.find({patient:tokenPayload.userId}).exec();
+
+        const appointments=await Appointment.find({patient:tokenPayload.userId})
+        .populate('patient')
+        .populate('clinick').exec();
         if(appointments.length==0){
             return res.status(200).json({message:"you have no appointments"});
         }
@@ -46,10 +49,12 @@ const getAppointmentById=async(req,res)=>{
 
 const addAppointment=async(req,res)=>{
     try{
-        const {patient,clinick,appointmentDate,bookingTime,status}=req.body;
+        //replcable with /:id of the uesr
+        const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
+        const {clinick,appointmentDate,bookingTime,status}=req.body;
 
         let appointment=new Appointment({
-            patient,
+            patient:tokenPayload.userId,
             clinick,
             appointmentDate,
             bookingTime,

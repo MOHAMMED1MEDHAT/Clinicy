@@ -4,10 +4,10 @@ const ajv=new Ajv();
 const schema={
     "type":"object",
     "properties":{
-        "patient":{
-            "type":"string",
-            // "pattern":"^[A-Z][a-z]*$"
-        },
+        // "patient":{
+        //     "type":"string",
+        //     // "pattern":"^[A-Z][a-z]*$"
+        // },
         "clinick":{
             "type":"string",
         },
@@ -27,7 +27,7 @@ const schema={
             "type":"string"
         }
     },
-    "required":["patient","clinick","appointmentDate","bookingTime"]
+    "required":["clinick","appointmentDate","bookingTime"]
 }
 
 

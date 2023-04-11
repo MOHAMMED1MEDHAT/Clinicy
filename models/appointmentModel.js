@@ -5,12 +5,12 @@ const mongoose=require('mongoose');
 const appointmentSchema=mongoose.Schema({
     patient:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"patients",
+        ref:"patient",
         required:true,
     },
     clinick:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"clinics",
+        ref:"clinick",
         required:true
     },
     appointmentDate:{

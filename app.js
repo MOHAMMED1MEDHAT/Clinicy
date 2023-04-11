@@ -40,10 +40,10 @@ const app=express();
 process.on("uncaughtException",(exception)=>{console.log("uncaught Exception"+exception);});
 process.on("unhandledRejection",(exception)=>{console.log("uncaught async Exception"+exception);});
 
-mongoose.connect(process.env.LOCAl_CONNECTION_STRING,{
+mongoose.connect(process.env.ATLAS_CONNECTION_STRING,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
-    dbName:"Clincky"
+    dbName:"clincky"
 }).then(()=>{
     console.log('Connected to db');
 }).catch((err) => console.log("error occured"+err));
@@ -53,7 +53,7 @@ mongoose.connect(process.env.LOCAl_CONNECTION_STRING,{
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(cors());
-app.optine("*",cors);
+app.options("*",cors);
 app.use("/api/user/signUp",userRouter);//test done
 app.use("/api/user",authRouter);//test done
 app.use("/api/search",searchRouter);//test done
