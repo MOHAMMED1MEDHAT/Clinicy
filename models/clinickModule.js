@@ -5,7 +5,7 @@ const mongoose=require('mongoose');
 const clinickSchema=mongoose.Schema({
     doctor:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"doctors",
+        ref:"doctor",
         required:true,
     },
     phone:{
@@ -37,5 +37,13 @@ const clinickSchema=mongoose.Schema({
         default:0,
     }
 });
+
+clinickSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+clinickSchema.set('toJSON',{
+    virtuals:true
+})
 
 module.exports =mongoose.model("clinick", clinickSchema);

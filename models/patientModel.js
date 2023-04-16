@@ -1,6 +1,8 @@
 const mongoose=require('mongoose');
 const valid=require('validator');
 const jwt=require("jsonwebtoken");
+const config=require("config");
+const jwtSCRT=config.get("env_var.jwtScreteKey")
 
 const patientSchema=mongoose.Schema({
     name:{
@@ -33,12 +35,24 @@ const patientSchema=mongoose.Schema({
     }
 });
 
+patientSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+patientSchema.set('toJSON',{
+    virtuals:true
+})
+
 patientSchema.method("getAuthToken",(id,isAdmin)=>{
     const token=jwt.sign({
-        userId:id,
-        userType:"patient",
-        isAdmin:isAdmin
-    },"thisthesecrettokenkey");
+            userId:id,
+            userType:"patient",
+            isAdmin:isAdmin
+        },
+        jwtSCRT,
+        {
+            expiresIn:'1d'
+        });
     //test--------------------------
     // console.log(id,isAdmin);
     //-------------------------

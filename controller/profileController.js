@@ -15,7 +15,7 @@ const getUserData=async(req,res)=>{
         // console.log(tokenPayload)
         //----------------------------
         if(tokenPayload.userType.toUpperCase()==="PATIENT"){
-            let patient=await Patient.findById(tokenPayload.userId,{name:1,email:1,image:1,type:1}).exec();
+            let patient=await Patient.findById(tokenPayload.userId).select("name email image type").exec();
             if(!patient){
                 return res.status(400).json({message:"Bad request"})
             }

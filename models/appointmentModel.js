@@ -35,4 +35,12 @@ const appointmentSchema=mongoose.Schema({
     }
 });
 
+appointmentSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+appointmentSchema.set('toJSON',{
+    virtuals:true
+})
+
 module.exports =mongoose.model("appointments", appointmentSchema);

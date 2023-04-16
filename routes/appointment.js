@@ -5,6 +5,8 @@ const router=require("express").Router();
 
 router.get("/patient",appointment.getAllPatientAppointments);
 
+router.get("/",appointment.getAllAppointments);
+
 router.get("/clinic/:clinicId",appointment.getAllClinickAppointmentsByClinickId);
 
 router.get("/:appointmentId",appointment.getAppointmentById);

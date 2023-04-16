@@ -1,6 +1,8 @@
 const mongoose=require('mongoose');
 const valid=require('validator');
 const jwt=require("jsonwebtoken");
+const config=require("config");
+const jwtSCRT=config.get("env_var.jwtScreteKey")
 
 const userSchema=mongoose.Schema({
     name:{
@@ -34,11 +36,19 @@ const userSchema=mongoose.Schema({
     }
 });
 
+userSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+userSchema.set('toJSON',{
+    virtuals:true
+})
+
 userSchema.method("getAuthToken",(id,isAdmin)=>{
     const token=jwt.sign({
         userId:id,
         isAdmin:isAdmin
-    },"thisthesecrettokenkey");
+    },jwtSCRT);
     //test--------------------------
     // console.log(id,isAdmin);
     //-------------------------

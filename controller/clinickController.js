@@ -25,7 +25,11 @@ const getAllClinicks=async(req,res)=>{
         //replcable with /:id of the user
         const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
         if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
-            let clinicks=await Clinick.find({doctor:tokenPayload.userId}).exec();
+            let clinicks=await Clinick.find({doctor:tokenPayload.userId})
+            populate({
+                path:"doctor",
+                select:"name"
+            }).exec();
             if(clinicks.length==0){
                 return res.status(200).json({message:"No clinick was added yet"});
             }
@@ -41,7 +45,15 @@ const getAllClinicks=async(req,res)=>{
 
 const getClinickById=async(req,res)=>{
     try{
-        const clinick=await Clinick.findById(req.params.id).exec();
+        //id validation
+        if(!mongoose.isValidObjectId(req.params.id)){
+            return res.status(400).json({message:"Invalid clinic id"});
+        }
+        const clinick=await Clinick.findById(req.params.id)
+        .populate({
+            paht:"doctor",
+            select:"name"
+        }).exec();
         if(!clinick){
             return res.status(400).json({message:"Bad request"});
         }
@@ -79,6 +91,10 @@ const addClinick=async(req,res)=>{
 
 const updateClinick=async(req,res)=>{
     try{
+        //id validation
+        if(!mongoose.isValidObjectId(req.params.id)){
+            return res.status(400).json({message:"Invalid clinic id"});
+        }
         const {phone,location,specialization,price,openDates}=req.body;
 
         const clinick=await Clinick.findByIdAndUpdate(req.params.id,{
@@ -98,8 +114,14 @@ const updateClinick=async(req,res)=>{
     }
 };
 
+
 const deletClinick=async(req,res)=>{
     try{
+        //id validation
+        if(!mongoose.isValidObjectId(req.params.id)){
+            return res.status(400).json({message:"Invalid clinic id"});
+        }
+
         const clinick=await Clinick.findByIdAndDelete(req.params.id).exec();
         if(!clinick){
             return res.status(400).json({message:"Bad request from delete"});
