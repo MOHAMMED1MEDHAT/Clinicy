@@ -54,7 +54,9 @@ doctorSchema.method("getAuthToken",(id,isAdmin)=>{
         userType:"Doctor",
         isAdmin:isAdmin
     },jwtSCRT,
-    {expiresIn:"1d"});//expiration option
+    {
+        expiresIn:"1m"
+    });//expiration option
     //test--------------------------
     // console.log(id,isAdmin);
     //-------------------------

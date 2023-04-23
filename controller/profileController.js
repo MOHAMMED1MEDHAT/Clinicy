@@ -94,4 +94,4 @@ module.exports={
     getUserData,
     updateUserData,
     deleteUserData
-}
+} 

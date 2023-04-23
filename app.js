@@ -1,5 +1,6 @@
 require("dotenv").config({path:__dirname+"/.env"});
 const mongoose=require("mongoose");
+const morgan=require("morgan")
 // const bodyParser=require("body-parser")
 const cors=require("cors");
 const express=require("express");
@@ -43,12 +44,13 @@ mongoose.connect(process.env.LOCAL_CONNECTION_STRING,{
 
 
 //moddleware
-app.use(authJwt)
-app.use(express.urlencoded({extended:true}));
-app.use(express.json());
 app.use(cors());
 app.options("*",cors);
-app.use(errorHandler)
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+app.use(morgan("tiny"))
+// app.use(authJwt)
+// app.use(errorHandler)
 
 //routes
 const userRouter=require("./routes/user")
@@ -69,7 +71,7 @@ app.use("/api/clinicks",clinickRouter);//test done
 
 const port=process.env.PORT||4000;
 app.listen(port,()=>{
-    console.log(`listening ....!!! http://localhost:${port}`)
+    console.log(`listening ....!!! on port:${port}`)
 });
 
 /*TODO:

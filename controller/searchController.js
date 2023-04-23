@@ -1,4 +1,5 @@
 const Doctor=require("../models/doctorModel");
+const Clinic=require("../models/clinickModule");
 
 
 const searchUsingSpecializtion= async(req,res)=>{
@@ -7,7 +8,7 @@ const searchUsingSpecializtion= async(req,res)=>{
     // console.log(doctorName,specialization)
     //------------------------
     try{
-        let searchResults=await Doctor.find({
+        let searchResults=await Clinic.find({
             specialization:specialization,
         },
         {name:1}).exec();

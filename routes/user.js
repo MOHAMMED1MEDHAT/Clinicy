@@ -16,7 +16,7 @@ router.post("/",validator,async(req,res)=>{
             let used=await Patient.findOne({email:req.body.email}).exec();
 
             if(used){
-                return res.json({message:"email already exists as a patient..."})
+                return res.status(400).json({message:"email already exists as a patient..."})
             }
 
             const salt=await bcrypt.genSalt(10);
@@ -40,7 +40,7 @@ router.post("/",validator,async(req,res)=>{
             // console.log(used)
             //----------------
             if(used){
-                return  res.json({message:"email already exists as a doctor ..."});
+                return  res.status(400).json({message:"email already exists as a doctor ..."});
             }
             const salt=await bcrypt.genSalt(10);
             const hashedPswrd=await bcrypt.hash(req.body.password,salt);

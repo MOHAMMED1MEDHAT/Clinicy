@@ -26,7 +26,7 @@ const getAllClinicks=async(req,res)=>{
         const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
         if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
             let clinicks=await Clinick.find({doctor:tokenPayload.userId})
-            populate({
+            .populate({
                 path:"doctor",
                 select:"name"
             }).exec();
