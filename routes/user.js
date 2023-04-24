@@ -26,6 +26,7 @@ router.post("/",validator,async(req,res)=>{
                 email:req.body.email,
                 image:req.body.imageUrl,
                 password:hashedPswrd,
+                gender:req.body.gender,
                 type:req.body.type
             })
             await patient.save();
@@ -51,6 +52,7 @@ router.post("/",validator,async(req,res)=>{
                 image:req.body.imageUrl,
                 password:hashedPswrd,
                 specialization:req.body.specialization,
+                gender:req.body.gender,
                 type:req.body.type
             })
             await doctor.save();
