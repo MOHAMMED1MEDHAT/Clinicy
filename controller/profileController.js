@@ -19,14 +19,14 @@ const getUserData=async(req,res)=>{
             if(!patient){
                 return res.status(400).json({message:"Bad request"})
             }
-            res.status(200).json({...patient});
+            res.status(200).json(patient);
 
         }else if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
             let doctor=await Doctor.findById(tokenPayload.userId,{name:1,email:1,image:1,type:1}).exec();
             if(!doctor){
                 return res.status(400).json({message:"Bad request"})
             }
-            res.status(200).json({...doctor});
+            res.status(200).json(doctor);
         }
 
     }catch(err){
