@@ -39,6 +39,26 @@ const doctorSchema=mongoose.Schema({
         type:String,
         required:true
     },
+    gender:{
+        type:String,
+        required:true
+    },
+    gender:{
+        type:String,
+        required:true
+    },
+    gender:{
+        type:String,
+        required:true
+    },
+    gender:{
+        type:String,
+        required:true
+    },
+    gender:{
+        type:String,
+        required:true
+    },
     type:{
         type:String,
         required:true
@@ -60,7 +80,7 @@ doctorSchema.method("getAuthToken",(id,isAdmin)=>{
         isAdmin:isAdmin
     },jwtSCRT,
     {
-        expiresIn:"1M"
+        expiresIn:"365d"
     });//expiration option
     //test--------------------------
     // console.log(id,isAdmin);

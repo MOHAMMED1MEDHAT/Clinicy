@@ -56,7 +56,7 @@ patientSchema.method("getAuthToken",(id,isAdmin)=>{
         },
         jwtSCRT,
         {
-            expiresIn:'1M'
+            expiresIn:'365d'
         });
     //test--------------------------
     // console.log(id,isAdmin);
