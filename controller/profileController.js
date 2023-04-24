@@ -15,14 +15,14 @@ const getUserData=async(req,res)=>{
         // console.log(tokenPayload)
         //----------------------------
         if(tokenPayload.userType.toUpperCase()==="PATIENT"){
-            let patient=await Patient.findById(tokenPayload.userId).select("name email image type").exec();
+            let patient=await Patient.findById(tokenPayload.userId).select("name email image type gender").exec();
             if(!patient){
                 return res.status(400).json({message:"Bad request"})
             }
             res.status(200).json(patient);
 
         }else if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
-            let doctor=await Doctor.findById(tokenPayload.userId,{name:1,email:1,image:1,type:1}).exec();
+            let doctor=await Doctor.findById(tokenPayload.userId).select("name email image type gender").exec();
             if(!doctor){
                 return res.status(400).json({message:"Bad request"})
             }
@@ -47,7 +47,7 @@ const updateUserData=async(req,res)=>{
             if(!patient){
                 return res.status(400).json({message:"Bad request"});
             }
-            res.status(200).json({...patient})
+            res.status(200).json(patient)
 
         }else if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
             let doctor=await Doctor.findByIdAndUpdate(tokenPayload.userId,{
@@ -57,7 +57,7 @@ const updateUserData=async(req,res)=>{
             if(!doctor){
                 return res.status(400).json({message:"Bad request"});
             }
-            res.status(200).json({...doctor})
+            res.status(200).json(doctor)
         }
 
     }catch(err){
