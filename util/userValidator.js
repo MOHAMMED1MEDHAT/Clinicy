@@ -24,9 +24,12 @@ const schema={
         },
         "specialization":{
             "type":"string"
+        },
+        "gender":{
+            "type":"string"
         }
     },
-    "required":["name","email","password","type"]
+    "required":["name","email","password","gender","type"]
 }
 
 

@@ -30,8 +30,13 @@ const patientSchema=mongoose.Schema({
         type:String,
         default:"ImageUrl"
     },
+    gender:{
+        type:String,
+        required:true
+    },
     type:{
         type:String,
+        required:true
     }
 });
 
@@ -51,7 +56,7 @@ patientSchema.method("getAuthToken",(id,isAdmin)=>{
         },
         jwtSCRT,
         {
-            expiresIn:'1m'
+            expiresIn:'1M'
         });
     //test--------------------------
     // console.log(id,isAdmin);

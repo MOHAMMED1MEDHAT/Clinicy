@@ -11,7 +11,6 @@ router.post("/",validator,async(req,res)=>{
         //test---------------
         // console.log(req.body.type.toUpperCase());
         //--------------------------
-
         if(req.body.type.toUpperCase()=="PATIENT"){
             let used=await Patient.findOne({email:req.body.email}).exec();
 
@@ -26,7 +25,8 @@ router.post("/",validator,async(req,res)=>{
                 name:req.body.name,
                 email:req.body.email,
                 image:req.body.imageUrl,
-                password:hashedPswrd
+                password:hashedPswrd,
+                type:req.body.type
             })
             await patient.save();
             const token=patient.getAuthToken(patient._id,patient.isAdmin);
@@ -50,7 +50,8 @@ router.post("/",validator,async(req,res)=>{
                 email:req.body.email,
                 image:req.body.imageUrl,
                 password:hashedPswrd,
-                specialization:req.body.specialization
+                specialization:req.body.specialization,
+                type:req.body.type
             })
             await doctor.save();
             const token=doctor.getAuthToken(doctor._id,doctor.isAdmin);

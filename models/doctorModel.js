@@ -35,9 +35,14 @@ const doctorSchema=mongoose.Schema({
         type:String,
         default:"ImageUrl"
     },
+    gender:{
+        type:String,
+        required:true
+    },
     type:{
         type:String,
-    },
+        required:true
+    }
 });
 
 doctorSchema.virtual('id').get(function(){
@@ -55,7 +60,7 @@ doctorSchema.method("getAuthToken",(id,isAdmin)=>{
         isAdmin:isAdmin
     },jwtSCRT,
     {
-        expiresIn:"1m"
+        expiresIn:"1M"
     });//expiration option
     //test--------------------------
     // console.log(id,isAdmin);
