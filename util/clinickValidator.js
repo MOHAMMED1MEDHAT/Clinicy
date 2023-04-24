@@ -25,6 +25,9 @@ const schema={
         },
         "rating":{
             "type":"string"
+        },
+        "about":{
+            "type":"string"
         }
     },
     "required":["phone","location","specialization","price","openDates"]

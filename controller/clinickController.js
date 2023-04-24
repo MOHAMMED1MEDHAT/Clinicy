@@ -1,7 +1,8 @@
 const Clinick=require("../models/clinickModule");
 
 const jwt =require("jsonwebtoken");
-const config=require("config")
+const config=require("config");
+const { default: mongoose } = require("mongoose");
 const jwtSCRT=config.get("env_var.jwtScreteKey")
 
 
@@ -51,7 +52,7 @@ const getClinickById=async(req,res)=>{
         }
         const clinick=await Clinick.findById(req.params.id)
         .populate({
-            paht:"doctor",
+            path:"doctor",
             select:"name"
         }).exec();
         if(!clinick){
