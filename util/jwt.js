@@ -7,12 +7,13 @@ function auth() {
     return jwt({
         secret: jwtSecret,
         algorithms: ['HS256'],
+        credentialsRequired:true,
         // isRevoked: isRevoked
     }).unless({
         path: [
-        '/api/user/signup',
-        '/api/user/login'
-        ]
+            "/api/user/login",
+            "/api/user/signup"
+    ]
     });
 }
 

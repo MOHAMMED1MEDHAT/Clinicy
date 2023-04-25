@@ -1,7 +1,7 @@
 require("dotenv").config({path:__dirname+"/.env"});
 const mongoose=require("mongoose");
 const morgan=require("morgan")
-// const bodyParser=require("body-parser")
+const helmet=require("helmet")
 const cors=require("cors");
 const express=require("express");
 const authJwt = require("./util/jwt");
@@ -44,6 +44,14 @@ mongoose.connect(process.env.ATLAS_CONNECTION_STRING,{
 
 
 //moddleware
+// app.use(helmet.contentSecurityPolicy({
+
+// }));
+// app.use((req, res, next) => {
+//     res.setHeader('Content-Security-Policy', "default-src 'self'");
+//     next();
+// });
+//middlewares
 app.use(cors());
 app.options("*",cors);
 app.use(express.urlencoded({extended:true}));
@@ -61,7 +69,7 @@ const profileRouter=require("./routes/profile")
 const appointmentRouter=require("./routes/appointment")
 const clinickRouter=require("./routes/clinick")
 
-app.use("/api/user/signUp",userRouter);//test done
+app.use("/api/user/signup",userRouter);//test done
 app.use("/api/user",authRouter);//test done
 app.use("/api/search",searchRouter);//test done
 app.use("/api/profile",profileRouter);//test done
