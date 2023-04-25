@@ -49,8 +49,8 @@ app.options("*",cors);
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(morgan("tiny"))
-// app.use(authJwt)
-// app.use(errorHandler)
+app.use(authJwt())
+app.use(errorHandler)
 
 //routes
 const userRouter=require("./routes/user")

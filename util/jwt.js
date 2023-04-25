@@ -1,16 +1,16 @@
-const jwt = require('jsonwebtoken');
-const expressJwt = require('express-jwt');
+// const jwt = require('jsonwebtoken');
+var { expressjwt: jwt } = require("express-jwt");
 const config = require('config');
 const jwtSecret = config.get('env_var.jwtScreteKey');
 
 function auth() {
-    return expressJwt({
+    return jwt({
         secret: jwtSecret,
         algorithms: ['HS256'],
-        isRevoked: isRevoked
+        // isRevoked: isRevoked
     }).unless({
         path: [
-        '/api/user/signUp',
+        '/api/user/signup',
         '/api/user/login'
         ]
     });

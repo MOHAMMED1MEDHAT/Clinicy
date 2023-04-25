@@ -1,4 +1,5 @@
 const validator=require("../middleware/userMWvalidator");
+const errHandler=require("../middleware/errorHandlerMw");
 const Patient=require("../models/patientModel")
 const Doctor=require("../models/doctorModel")
 // const User=require("../models/userModel")
@@ -63,7 +64,8 @@ router.post("/",validator,async(req,res)=>{
 
     }catch(err){
         console.log(err);
-        res.status(500).json({message:"Internal server error"});
+        errHandler(err)
+        // res.status(500).json({message:"Internal server error"});
     }
 });
 
