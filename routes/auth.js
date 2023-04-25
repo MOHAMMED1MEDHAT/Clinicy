@@ -20,7 +20,7 @@ router.post("/login",validator,async(req,res)=>{
 
             const token=patient.getAuthToken(patient._id,patient.isAdmin);
             res.cookie("x-auth-token",token,{httpOnly:true});
-            res.status(200).json({message:"signed in successfully..."},patient);
+            res.status(200).json({message:"signed in successfully...",patient});
 
 
         }else if(req.body.type.toUpperCase()==="DOCTOR")
