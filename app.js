@@ -5,28 +5,28 @@ const helmet=require("helmet")
 const cors=require("cors");
 const express=require("express");
 const authJwt = require("./util/jwt");
-const dateCalc = require("./util/dateCalculations");
+// const dateCalc = require("./util/dateCalculations");
 const errorHandler=require("./middleware/errorHandlerMw")
 const app=express();
 
 //test---------------
-console.log(dateCalc.getNextDayApperance("2023-05-2","monday"));
-console.log(dateCalc.isDateInPast("2023-04-25"));
-console.log(dateCalc.getUpcomingDatesForMonth("saturday"));
-const data={
-    days:[
-        "Monday",
-        "sunday",
-        "friday"
-    ],
-    time:[
-        "12:30",
-        "1:30",
-        "2:30",
-        "3:30"
-    ]
-}
-console.log(JSON.stringify(data));
+// console.log(dateCalc.getNextDayApperance("2023-05-2","monday"));
+// console.log(dateCalc.isDateInPast("2023-04-25"));
+// console.log(dateCalc.getUpcomingDatesForMonth("saturday"));
+// const data={
+//     days:[
+//         "Monday",
+//         "sunday",
+//         "friday"
+//     ],
+//     time:[
+//         "12:30",
+//         "1:30",
+//         "2:30",
+//         "3:30"
+//     ]
+// }
+// console.log(JSON.stringify(data));
 //-------------------
 
 
