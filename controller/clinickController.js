@@ -32,7 +32,7 @@ const getAllClinicks=async(req,res)=>{
             if(clinicks.length==0){
                 return res.status(200).json({message:"No clinick was added yet"});
             }
-            res.status(200).json({clinicks});
+            res.status(200).json(clinicks);
         }else{
             return res.status(401).json({message:"UNAUTHORIZED ACTION"})
         }
@@ -63,7 +63,7 @@ const getClinickById=async(req,res)=>{
         if(!clinick){
             return res.status(400).json({message:"Bad request"});
         }
-        res.status(200).json({clinick});
+        res.status(200).json(clinick);
 
     }catch(err){
         console.log(err);
@@ -94,7 +94,7 @@ const addClinick=async(req,res)=>{
 
 
 
-        res.status(200).json({message:"clinick was added successfully",clinick});
+        res.status(200).json(clinick);
     }catch(err){
         console.log(err);
         res.status(500).json({message:"Internal server error"});
@@ -119,7 +119,7 @@ const updateClinick=async(req,res)=>{
         if(!clinick){
             return res.status(400).send("Bad reqest");
         }
-        res.status(200).json({message:"Clinick was updated successfully",clinick});
+        res.status(200).json(clinick);
     }catch(err){
         console.log(err);
         res.status(500).json({message:"Internal server error"})

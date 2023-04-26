@@ -41,7 +41,7 @@ const schema={
             },
         },
         "rating":{
-            "type":"string"
+            "type":"number"
         },
         "about":{
             "type":"string"
