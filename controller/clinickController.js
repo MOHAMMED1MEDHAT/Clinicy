@@ -28,11 +28,7 @@ const getAllClinicks=async(req,res)=>{
         //replcable with /:id of the user
         const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
         if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
-            let clinicks=await Clinick.find({doctor:tokenPayload.userId})
-            .populate({
-                path:"doctor",
-                select:"name"
-            }).select("-reservedDates").exec();
+            let clinicks=await Clinick.find({doctor:tokenPayload.userId}).select(" -doctor -reservedDates").exec();
             if(clinicks.length==0){
                 return res.status(200).json({message:"No clinick was added yet"});
             }
@@ -80,7 +76,7 @@ const addClinick=async(req,res)=>{
         //replcable with /:id of the user
         const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
 
-        const {phone,clinicName,location,specialization,price,openDates,rating}=req.body;
+        const {phone,clinicName,location,specialization,price,openDates,rating,about}=req.body;
 
         let clinick=new Clinick({
             doctor:tokenPayload.userId,
@@ -90,7 +86,8 @@ const addClinick=async(req,res)=>{
             specialization,
             price,
             openDates,
-            rating
+            rating,
+            about
         });
         await clinick.save();
         await createReservedDatesRecord(clinick._id,clinick.openDates);

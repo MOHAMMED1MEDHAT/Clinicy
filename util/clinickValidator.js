@@ -47,7 +47,7 @@ const schema={
             "type":"string"
         }
     },
-    "required":["phone","clinicName","location","specialization","price","openDates"]
+    "required":["phone","clinicName","location","specialization","price","openDates","about"]
 }
 
 
