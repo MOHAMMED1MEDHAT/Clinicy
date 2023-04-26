@@ -32,7 +32,7 @@ const getAllClinicks=async(req,res)=>{
             .populate({
                 path:"doctor",
                 select:"name"
-            }).exec();
+            }).select("-reservedDates").exec();
             if(clinicks.length==0){
                 return res.status(200).json({message:"No clinick was added yet"});
             }
