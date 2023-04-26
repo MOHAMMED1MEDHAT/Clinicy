@@ -1,5 +1,7 @@
 const Appointment=require("../models/appointmentModel");
 const Clinic=require("../models/clinickModule");
+const ReservedDate=require("../models/reservedDatesModel");
+const dateCalc=require("../util/dateCalculations");
 
 const { default: mongoose } = require("mongoose");
 const jwt=require("jsonwebtoken")
@@ -110,8 +112,20 @@ const addAppointment=async(req,res)=>{
             appointmentDate,
             bookingTime,
             status
-        })
+        });
         await appointment.save();
+
+        //Update appointmentDate to dates entity
+        const {day,time}=dateCalc.extractDayNumberAndTime(appointmentDate);
+        const clkTime=await Clinic.findById(appointment.clinick).exec();
+        const idxOfTime=clkTime.openDates.time.indexOf(time);
+        const resDate=await ReservedDate.findOne({clinicId:appointment.clinick,day}).exec()
+        const timeUpdated=resDate.time
+        timeUpdated[idxOfTime]=true;
+        const reservedDate=await ReservedDate.findOneAndUpdate({clinicId:appointment.clinick,day},{
+            time:timeUpdated
+        }).exec();
+
         res.status(200).json({message:"appointment was saved successfully",appointment});
 
     }catch(err){

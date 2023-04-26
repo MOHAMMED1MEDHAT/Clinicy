@@ -8,6 +8,9 @@ const schema={
             "type":"string",
             // "pattern":"^[A-Z][a-z]*$"
         },
+        "clinicName":{
+            "type":"string"
+        },
         "phone":{
             "type":"string",
         },
@@ -20,8 +23,22 @@ const schema={
         "price":{
             "type":"string"
         },
-        "openDates":{
-            "type":"string"
+        "OpenDates": {
+            "type": "object",
+            "properties": {
+                "days": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "time": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
         },
         "rating":{
             "type":"string"
@@ -30,7 +47,7 @@ const schema={
             "type":"string"
         }
     },
-    "required":["phone","location","specialization","price","openDates"]
+    "required":["phone","clinicName","location","specialization","price","openDates"]
 }
 
 

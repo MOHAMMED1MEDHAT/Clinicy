@@ -5,29 +5,28 @@ const helmet=require("helmet")
 const cors=require("cors");
 const express=require("express");
 const authJwt = require("./util/jwt");
+const dateCalc = require("./util/dateCalculations");
 const errorHandler=require("./middleware/errorHandlerMw")
 const app=express();
 
 //test---------------
-// const { MongoClient } = require("mongodb");
-
-// // Replace the following with your Atlas connection string
-// const url = "mongodb+srv://admin:5eDunuda0guvOPST@cluster0.w82mk22.mongodb.net/clincky?retryWrites=true&w=majority";
-// const client = new MongoClient(url);
-
-// async function run() {
-//     try {
-//         await client.connect();
-//         console.log("Connected correctly to server");
-
-//     } catch (err) {
-//         console.log(err.stack);
-//     }
-//     finally {
-//         await client.close();
-//     }
-// }
-// run().catch(console.dir);
+console.log(dateCalc.getNextDayApperance("2023-05-2","monday"));
+console.log(dateCalc.isDateInPast("2023-04-25"));
+console.log(dateCalc.getUpcomingDatesForMonth("saturday"));
+const data={
+    days:[
+        "Monday",
+        "sunday",
+        "friday"
+    ],
+    time:[
+        "12:30",
+        "1:30",
+        "2:30",
+        "3:30"
+    ]
+}
+console.log(JSON.stringify(data));
 //-------------------
 
 
@@ -43,9 +42,7 @@ mongoose.connect(process.env.ATLAS_CONNECTION_STRING,{
 }).catch((err) => console.log("error occured"+err));
 
 
-//moddleware
 // app.use(helmet.contentSecurityPolicy({
-
 // }));
 // app.use((req, res, next) => {
 //     res.setHeader('Content-Security-Policy', "default-src 'self'");

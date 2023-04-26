@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+const reservedDatesModel = require('./reservedDatesModel');
 // const valid=require('validator');
 // const jwt=require("jsonwebtoken");
 
@@ -7,6 +8,10 @@ const clinickSchema=mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"doctor",
         required:true,
+    },
+    clinicName:{
+        type:String,
+        required:true
     },
     phone:{
         type:Number,
@@ -25,7 +30,7 @@ const clinickSchema=mongoose.Schema({
         required:true
     },
     openDates:{
-        type:String,
+        type:Object,
         required:true
     },
     rating:{
@@ -38,6 +43,9 @@ const clinickSchema=mongoose.Schema({
     },
     about:{
         type:String
+    },
+    reservedDates:{
+        type:Array,
     }
 });
 

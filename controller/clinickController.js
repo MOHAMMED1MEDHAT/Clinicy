@@ -1,4 +1,6 @@
 const Clinick=require("../models/clinickModule");
+const ResDates=require("../models/reservedDatesModel");
+const dateCalc=require("../util/dateCalculations");
 
 const jwt =require("jsonwebtoken");
 const config=require("config");
@@ -50,6 +52,13 @@ const getClinickById=async(req,res)=>{
         if(!mongoose.isValidObjectId(req.params.id)){
             return res.status(400).json({message:"Invalid clinic id"});
         }
+
+        const resDate=await ResDates.find({clinicId:req.params.id}).select("-_id day time").exec();
+
+        const clkReservedDates=await Clinick.findByIdAndUpdate(req.params.id,{
+            reservedDates:resDate
+        }).exec()
+
         const clinick=await Clinick.findById(req.params.id)
         .populate({
             path:"doctor",
@@ -71,10 +80,11 @@ const addClinick=async(req,res)=>{
         //replcable with /:id of the user
         const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
 
-        const {phone,location,specialization,price,openDates,rating}=req.body;
+        const {phone,clinicName,location,specialization,price,openDates,rating}=req.body;
 
         let clinick=new Clinick({
             doctor:tokenPayload.userId,
+            clinicName,
             phone,
             location,
             specialization,
@@ -83,6 +93,10 @@ const addClinick=async(req,res)=>{
             rating
         });
         await clinick.save();
+        await createReservedDatesRecord(clinick._id,clinick.openDates);
+
+
+
         res.status(200).json({message:"clinick was added successfully",clinick});
     }catch(err){
         console.log(err);
@@ -141,3 +155,34 @@ module.exports={
     updateClinick,
     deletClinick,
 };
+
+const createReservedDatesRecord=async(clinicId,dates)=>{
+    const {days,time}=dates
+    //test--------
+    console.log(days,time);
+    //-------------------------------
+    
+    let times=[]
+    for(let i=0;i<time.length;i++){
+        times.push(false)
+    }
+    let upcomingDays=[]
+    days.forEach(day=> {
+        upcomingDays.push(dateCalc.getUpcomingDatesForMonth(day.toLowerCase()));
+    });
+    //test-----------------
+    console.log(upcomingDays)
+    //----------------------------
+    upcomingDays.forEach(async days=>{
+        days.forEach(async day=>{
+            let datesRecord=new ResDates({
+                clinicId,
+                day,
+                time:times,
+            })
+            await datesRecord.save();
+            console.log("Dates Saved successfully");
+        })
+    })
+
+}
