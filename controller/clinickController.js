@@ -32,7 +32,7 @@ const getAllClinicks=async(req,res)=>{
             .select(" -doctor -reservedDates")
             .exec();
             if(clinicks.length==0){
-                return res.status(200).json({message:"No clinick was added yet"});
+                return res.status(204).json({message:"No clinick was added yet"});
             }
             res.status(200).json(clinicks);
         }else{
@@ -142,7 +142,7 @@ const deletClinick=async(req,res)=>{
 
         const clinick=await Clinick.findByIdAndDelete(req.params.id).exec();
         if(!clinick){
-            return res.status(400).json({message:"Bad request from delete"});
+            return res.status(400).json({message:"Bad request"});
         }
         res.status(200).json({message:"Clinick was deleted successfully",clinick});
     }catch(err){

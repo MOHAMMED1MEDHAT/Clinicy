@@ -27,7 +27,7 @@ const getAllAppointments=async(req,res)=>{
         }})
         .exec();
         if(appointments.length==0){
-            return res.status(400).json({message:"you have no appointments"});
+            return res.status(204).json({message:"you have no appointments"});
         }
         res.status(200).json(appointments);
     }catch(err){
@@ -56,7 +56,7 @@ const getAllPatientAppointments=async(req,res)=>{
             }
         }).exec();
         if(appointments.length==0){
-            return res.status(200).json({message:"you have no appointments"});
+            return res.status(204).json({message:"you have no appointments"});
         }
         res.status(200).json(appointments)
     }catch(err){
@@ -89,7 +89,7 @@ const getAllClinickAppointmentsByClinickId=async(req,res)=>{
         // .select("-_id -__v")
         .exec();
         if(appointments.length==0){
-            return res.status(200).json({message:"No appointments was added yet"});
+            return res.status(204).json({message:"No appointments was added yet"});
         }
         res.status(200).json(appointments);
     }catch(err){

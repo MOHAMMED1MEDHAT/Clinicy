@@ -17,7 +17,7 @@ const searchUsingSpecializtion= async(req,res)=>{
         .exec();
 
         if(searchResults.length==0){
-            return res.json({message:"Name or specialization Not found"});
+            return res.status(204).json({message:"Name or specialization Not found"});
         }
 
         return res.status(200).json(searchResults)
@@ -42,7 +42,7 @@ const searchUsingDoctorname= async(req,res)=>{
         .exec();
 
         if(DocSearchResults.length==0){
-            return res.send("Name Not found");
+            return res.status(204).json({message:"Name Not found"});
         }
         // }else{
         //     const ClinicSearcResults=await Clinic.find()
