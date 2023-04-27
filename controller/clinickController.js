@@ -28,7 +28,9 @@ const getAllClinicks=async(req,res)=>{
         //replcable with /:id of the user
         const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
         if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
-            let clinicks=await Clinick.find({doctor:tokenPayload.userId}).select(" -doctor -reservedDates").exec();
+            let clinicks=await Clinick.find({doctor:tokenPayload.userId})
+            .select(" -doctor -reservedDates")
+            .exec();
             if(clinicks.length==0){
                 return res.status(200).json({message:"No clinick was added yet"});
             }
@@ -49,7 +51,9 @@ const getClinickById=async(req,res)=>{
             return res.status(400).json({message:"Invalid clinic id"});
         }
 
-        const resDate=await ResDates.find({clinicId:req.params.id}).select("-_id day time").exec();
+        const resDate=await ResDates.find({clinicId:req.params.id})
+        .select("-_id day time")
+        .exec();
 
         const clkReservedDates=await Clinick.findByIdAndUpdate(req.params.id,{
             reservedDates:resDate
@@ -59,7 +63,9 @@ const getClinickById=async(req,res)=>{
         .populate({
             path:"doctor",
             select:"name"
-        }).exec();
+        })
+        // .select("-_id -__v")
+        .exec();
         if(!clinick){
             return res.status(400).json({message:"Bad request"});
         }

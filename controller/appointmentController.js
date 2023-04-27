@@ -22,12 +22,14 @@ const getAllAppointments=async(req,res)=>{
             select:"location",
             populate:{
                 path:"doctor",
-                select:"name"
-        }}).exec();
+                select:"name "
+        // }}).select("-_id -__v")
+        }})
+        .exec();
         if(appointments.length==0){
             return res.status(400).json({message:"you have no appointments"});
         }
-        res.status(200).json({appointments});
+        res.status(200).json(appointments);
     }catch(err){
         console.log(err);
         res.status(500).json({message:"Internal server error"});
@@ -41,15 +43,22 @@ const getAllPatientAppointments=async(req,res)=>{
     try{
 
         const appointments=await Appointment.find({patient:tokenPayload.userId})
-        .populate('patient')
+        .populate({
+            path:"patient",
+            // select:"-_id"
+        })
         .populate({
             path:"clinick",
-            populate:"doctor"
+            // select:"-_id",
+            populate:{
+                path:"doctor",
+                select:"name "
+            }
         }).exec();
         if(appointments.length==0){
             return res.status(200).json({message:"you have no appointments"});
         }
-        res.status(200).json({appointments})
+        res.status(200).json(appointments)
     }catch(err){
         console.log(err);
         res.status(500).json({message:"Internal server error"});
@@ -66,13 +75,23 @@ const getAllClinickAppointmentsByClinickId=async(req,res)=>{
 
         const appointments=await Appointment.find({clinick:req.params.clinicId})
         .populate({
-            path:"patient"
-            ,select:"name"
-        }).exec();
+            path:"patient",
+            select:"name"
+        })
+        .populate({
+            path:"clinick",
+            // select:"-_id",
+            populate:{
+                path:"doctor",
+                select:"name"
+            }
+        })
+        // .select("-_id -__v")
+        .exec();
         if(appointments.length==0){
             return res.status(200).json({message:"No appointments was added yet"});
         }
-        res.status(200).json({appointments});
+        res.status(200).json(appointments);
     }catch(err){
         console.log(err);
         res.status(500).json({message:"Internal server error"});
@@ -85,11 +104,23 @@ const getAppointmentById=async(req,res)=>{
             return res.status(400).json({message:"Invalid appointment id"});
         }
 
-        const appointment=await Appointment.findById(req.params.appointmentId).exec();
+        const appointment=await Appointment.findById(req.params.appointmentId)
+        .populate({
+            path:"patient",
+            // select:"-_id"
+        })
+        .populate({
+            path:"clinick",
+            // select:"-_id",
+            populate:{
+                path:"doctor",
+                select:"name"
+            }}).exec();
+        // }).select("-_id -__v").exec();
         if(!appointment){
             return res.status(400).json({message:"Invalid appointment id"});
         }
-        res.status(200).json({appointment});
+        res.status(200).json(appointment);
     }catch(err){
         console.log(err);
         res.status(500).json({message:"Internal server error"});

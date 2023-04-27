@@ -8,16 +8,19 @@ const searchUsingSpecializtion= async(req,res)=>{
     // console.log(doctorName,specialization)
     //------------------------
     try{
-        let searchResults=await Clinic.find({
-            specialization:specialization,
-        },
-        {name:1}).exec();
+        let searchResults=await Clinic.find({specialization:specialization})
+        .populate({
+            path:"doctor",
+            select:"name"
+        })
+        .select("-reservedDates")
+        .exec();
 
         if(searchResults.length==0){
             return res.json({message:"Name or specialization Not found"});
         }
 
-        return res.status(200).json({searchResults})
+        return res.status(200).json(searchResults)
     }catch(err){
         console.log(err);
         return res.status(500).json({message:"Internal server error in search router"});
@@ -25,20 +28,27 @@ const searchUsingSpecializtion= async(req,res)=>{
 };
 
 const searchUsingDoctorname= async(req,res)=>{
-    const {doctorName} = req.query;
-    //test------
-    console.log(doctorName)
-    //------------------------
+    const {name} = req.query;
+    const regex=new RegExp(name,"i")
+    // //test------
+    // console.log(name)
+    // //------------------------
     try{
-        let searchResults=await Doctor.find({
-            name:doctorName,
-        }).exec();
+        let DocSearchResults=await Doctor.find({
+            name:regex,
+        })
+        // .select("-_id -__v")
+        // .select("-id")
+        .exec();
 
-        if(searchResults.length==0){
-            return res.send("Name or specialization Not found");
+        if(DocSearchResults.length==0){
+            return res.send("Name Not found");
         }
-
-        return res.status(200).json({searchResults})
+        // }else{
+        //     const ClinicSearcResults=await Clinic.find()
+        //     return res.status(200).json(searchResults)
+        // }
+        return res.status(200).json(DocSearchResults)
     }catch(err){
         console.log(err);
         return res.status(500).json({message:"Internal server error in search router"});

@@ -15,14 +15,18 @@ const getUserData=async(req,res)=>{
         // console.log(tokenPayload)
         //----------------------------
         if(tokenPayload.userType.toUpperCase()==="PATIENT"){
-            let patient=await Patient.findById(tokenPayload.userId).select("name email image type gender").exec();
+            let patient=await Patient.findById(tokenPayload.userId)
+            .select("name email image type gender ")
+            .exec();
             if(!patient){
                 return res.status(400).json({message:"Bad request"})
             }
             res.status(200).json(patient);
 
         }else if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
-            let doctor=await Doctor.findById(tokenPayload.userId).select("name email image type gender").exec();
+            let doctor=await Doctor.findById(tokenPayload.userId)
+            .select("name email image type gender")
+            .exec();
             if(!doctor){
                 return res.status(400).json({message:"Bad request"})
             }
