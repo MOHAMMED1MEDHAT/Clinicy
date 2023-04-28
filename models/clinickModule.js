@@ -41,7 +41,8 @@ const clinickSchema=mongoose.Schema({
         default:0,
     },
     about:{
-        type:String
+        type:String,
+        default:"this is about"
     },
     reservedDates:{
         type:Array,

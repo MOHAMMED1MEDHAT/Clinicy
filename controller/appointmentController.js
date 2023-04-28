@@ -43,10 +43,10 @@ const getAllPatientAppointments=async(req,res)=>{
     try{
 
         const appointments=await Appointment.find({patient:tokenPayload.userId})
-        .populate({
-            path:"patient",
-            // select:"-_id"
-        })
+        // .populate({
+        //     path:"patient",
+        //     // select:"-_id"
+        // })
         .populate({
             path:"clinick",
             // select:"-_id",
@@ -78,14 +78,14 @@ const getAllClinickAppointmentsByClinickId=async(req,res)=>{
             path:"patient",
             select:"name"
         })
-        .populate({
-            path:"clinick",
-            // select:"-_id",
-            populate:{
-                path:"doctor",
-                select:"name"
-            }
-        })
+        // .populate({
+        //     path:"clinick",
+        //     // select:"-_id",
+        //     populate:{
+        //         path:"doctor",
+        //         select:"name"
+        //     }
+        // })
         // .select("-_id -__v")
         .exec();
         if(appointments.length==0){
