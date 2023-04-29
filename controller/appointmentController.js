@@ -78,14 +78,14 @@ const getAllClinickAppointmentsByClinickId=async(req,res)=>{
             path:"patient",
             select:"name"
         })
-        // .populate({
-        //     path:"clinick",
-        //     // select:"-_id",
-        //     populate:{
-        //         path:"doctor",
-        //         select:"name"
-        //     }
-        // })
+        .populate({
+            path:"clinick",
+            select:"-reservedDates -openDates",
+            populate:{
+                path:"doctor",
+                select:"name"
+            }
+        })
         // .select("-_id -__v")
         .exec();
         if(appointments.length==0){
@@ -191,7 +191,12 @@ const updateAppointmentByPatient=async(req,res)=>{
         if(!appointment){
             return res.status(400).json({message:"Bad request"});
         }
-        await UpdateAppointmentDate(true,appointment._id)
+        if(appointment.status.toUppperCase()==="CANCELED"){
+            await UpdateAppointmentDate(false,appointment._id)
+
+        }else{
+            await UpdateAppointmentDate(true,appointment._id)
+        }
         res.status(200).json({message:"updated successfully",appointment});
 
     }catch(err){
