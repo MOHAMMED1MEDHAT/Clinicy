@@ -44,10 +44,10 @@ const getAllPatientAppointments=async(req,res)=>{
     try{
 
         const appointments=await Appointment.find({patient:tokenPayload.userId})
-        // .populate({
-        //     path:"patient",
-        //     // select:"-_id"
-        // })
+        .populate({
+            path:"patient",
+            // select:"-_id"
+        })
         .populate({
             path:"clinick",
             select:"-openDates -reservedDates",
