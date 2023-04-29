@@ -28,33 +28,36 @@ const searchUsingSpecializtion= async(req,res)=>{
 };
 
 const searchUsingDoctorname= async(req,res)=>{
-    const {name} = req.query;
-    const regex=new RegExp(name,"i")
-    // //test------
-    // console.log(name)
-    // //------------------------
     try{
-        let DocSearchResults=await Doctor.find({
-            name:regex,
+        const {name} = req.query;
+        const regex=new RegExp(`\\b${name}\w*`,"g")
+        //test------
+        console.log(name)
+        // console.log(name[0])
+        // console.log(name.split(""))
+        //------------------------
+        const ClinicSearchResults=await Clinic.find({
+            clinicName:{$regex:regex}
+            // clinicName:name
         })
         // .select("-_id -__v")
         // .select("-id")
         .exec();
 
-        if(DocSearchResults.length==0){
+        if(ClinicSearchResults.length==0){
+            console.log("Name Not found")
             return res.status(204).json({message:"Name Not found"});
         }
         // }else{
         //     const ClinicSearcResults=await Clinic.find()
         //     return res.status(200).json(searchResults)
         // }
-        return res.status(200).json(DocSearchResults)
+        return res.status(200).json(ClinicSearchResults)
     }catch(err){
         console.log(err);
         return res.status(500).json({message:"Internal server error in search router"});
     }
 };
-
 
 module.exports={
     searchUsingSpecializtion,

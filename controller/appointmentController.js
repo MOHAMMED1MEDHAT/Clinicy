@@ -146,16 +146,17 @@ const addAppointment=async(req,res)=>{
         });
         await appointment.save();
 
-        //Update appointmentDate to dates entity
-        const {day,time}=dateCalc.extractDayNumberAndTime(appointmentDate);
-        const clkTime=await Clinic.findById(appointment.clinick).exec();
-        const idxOfTime=clkTime.openDates.time.indexOf(time);
-        const resDate=await ReservedDate.findOne({clinicId:appointment.clinick,day}).exec()
-        const timeUpdated=resDate.time
-        timeUpdated[idxOfTime]=true;
-        const reservedDate=await ReservedDate.findOneAndUpdate({clinicId:appointment.clinick,day},{
-            time:timeUpdated
-        }).exec();
+        //Update appointmentDate to dates entity and clinic entity
+        await UpdateAppointmentDate(true,appointment._id)
+        // const {day,time}=dateCalc.extractDayNumberAndTime(appointmentDate);
+        // const clkTime=await Clinic.findById(appointment.clinick).exec();
+        // const idxOfTime=clkTime.openDates.time.indexOf(time);
+        // const resDate=await ReservedDate.findOne({clinicId:appointment.clinick,day}).exec()
+        // const timeUpdated=resDate.time
+        // timeUpdated[idxOfTime]=true;
+        // const reservedDate=await ReservedDate.findOneAndUpdate({clinicId:appointment.clinick,day},{
+        //     time:timeUpdated
+        // }).exec();
 
         res.status(200).json({message:"appointment was saved successfully",appointment});
 
@@ -178,6 +179,8 @@ const updateAppointmentByPatient=async(req,res)=>{
             return res.status(400).json({message:"invalid clinic id"})
         }
 
+        await UpdateAppointmentDate(false,req.params.appointmentId)
+
         const appointment=await Appointment.findByIdAndUpdate(req.params.appointmentId,{
             patient,
             clinick,
@@ -188,6 +191,7 @@ const updateAppointmentByPatient=async(req,res)=>{
         if(!appointment){
             return res.status(400).json({message:"Bad request"});
         }
+        await UpdateAppointmentDate(true,appointment._id)
         res.status(200).json({message:"updated successfully",appointment});
 
     }catch(err){
@@ -232,6 +236,7 @@ const deleteAppointment=async(req,res)=>{
         if(!appointment){
             return res.status(400).json({message:"Bad request"});
         }
+        await UpdateAppointmentDate(false,req.params.appointmentId)
         res.status(200).json({message:"appointment was deleted successfully",appointment});
     }catch(err){
         console.log(err);
@@ -249,3 +254,30 @@ module.exports={
     updateAppointmentByPatient,
     deleteAppointment
 };
+
+const UpdateAppointmentDate=async(flag,appointmentId)=>{
+    const appointment=await Appointment.findById(appointmentId).exec();
+
+    //get the day and time of the appointment
+    const {day,time}=dateCalc.extractDayNumberAndTime(appointment.appointmentDate);
+    
+    //get the clinic which the appointment is in
+    const clkTime=await Clinic.findById(appointment.clinick).exec();
+    
+    //get the time which the appointment is signed to in the clinic
+    const idxOfTime=clkTime.openDates.time.indexOf(time);
+    
+    //get the reserved dates to update it
+    const resDate=await ReservedDate.findOne({clinicId:appointment.clinick,day}).exec()
+    const timeUpdated=resDate.time
+
+    //set the reserved dates to the flag
+    timeUpdated[idxOfTime]=flag;
+    
+    //update the reserved dates of the clinic
+    const reservedDate=await ReservedDate.findOneAndUpdate({clinicId:appointment.clinick,day},{
+        time:timeUpdated
+    }).exec();
+    //test-------------------
+    console.log("Update",appointment,"to be",flag)
+}

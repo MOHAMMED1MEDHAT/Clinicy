@@ -49,15 +49,14 @@ const getNextDayApperance=(dataString,dayName)=>{
     return dayHistory;
 }
 
-const getUpcomingDatesForMonth=(dayName)=>{
+const getUpcomingDatesForNUmberOfWeeks=(NumberOfWeeks,dayName)=>{
     let upcomingDays=[]
     let today=new Date();
-    for(let i=0;i<4;i++){
+    for(let i=0;i<NumberOfWeeks;i++){
         today=getNextDayApperance(today,dayName);
-        // today=getPreviousDay(today);
         upcomingDays.push(today);
     }
-    for (let i=0;i<4;i++){
+    for (let i=0;i<NumberOfWeeks;i++){
         upcomingDays[i]=getPreviousDay(upcomingDays[i]);
     }
     return upcomingDays
@@ -68,5 +67,5 @@ module.exports={
     extractDayNumberAndTime,
     getDayNameByDayHistory,
     getNextDayApperance,
-    getUpcomingDatesForMonth,
+    getUpcomingDatesForNUmberOfWeeks,
 }

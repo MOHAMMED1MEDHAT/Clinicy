@@ -5,6 +5,7 @@ const dateCalc=require("../util/dateCalculations");
 const jwt =require("jsonwebtoken");
 const config=require("config");
 const { default: mongoose } = require("mongoose");
+const { time } = require("console");
 const jwtSCRT=config.get("env_var.jwtScreteKey")
 
 
@@ -51,13 +52,17 @@ const getClinickById=async(req,res)=>{
             return res.status(400).json({message:"Invalid clinic id"});
         }
 
+        const clinicBefore=await Clinick.findById(req.params.id);
+
         const resDate=await ResDates.find({clinicId:req.params.id})
         .select("-_id day time")
         .exec();
 
+        console.log(resDate)
+
         const clkReservedDates=await Clinick.findByIdAndUpdate(req.params.id,{
             reservedDates:resDate
-        }).exec()
+        }).exec();
 
         const clinick=await Clinick.findById(req.params.id)
         .populate({
@@ -159,19 +164,20 @@ module.exports={
     deletClinick,
 };
 
+
 const createReservedDatesRecord=async(clinicId,dates)=>{
     const {days,time}=dates
     //test--------
     console.log(days,time);
     //-------------------------------
-    
+
     let times=[]
     for(let i=0;i<time.length;i++){
         times.push(false)
     }
     let upcomingDays=[]
     days.forEach(day=> {
-        upcomingDays.push(dateCalc.getUpcomingDatesForMonth(day.toLowerCase()));
+        upcomingDays.push(dateCalc.getUpcomingDatesForNUmberOfWeeks(5,day.toLowerCase()));
     });
     //test-----------------
     console.log(upcomingDays)
@@ -189,3 +195,35 @@ const createReservedDatesRecord=async(clinicId,dates)=>{
     })
 
 }
+
+//This function will check for all dates that have been passed, 
+//clean the db and update with the new date 
+async function updateReservedDatesRecord(){
+    const today=new Date().toISOString().substring(0,10);
+    const passedDates=await ResDates.find({ day: { $lt: today } }).exec();
+
+    if(!passedDates.length==0){
+        passedDates.forEach(async date=>{
+            let times=[]
+            date.time.forEach(t=>{
+                times.push(false)
+            })
+            let NewDatesRecord=new ResDates({
+                clinicId:date.clinicId,
+                day:dateCalc.getUpcomingDatesForNUmberOfWeeks(5,dateCalc.getDayNameByDayHistory(date.day))[3],
+                time:times,
+            })
+            await NewDatesRecord.save();
+            console.log("Dates added successfully",NewDatesRecord);
+    
+            const oldDateRecord= await ResDates.findByIdAndDelete(date._id).exec();
+            console.log("Date deleted successfully",oldDateRecord);
+
+        })
+    }else{
+        console.log("no dates is passed",passedDates);
+    }
+    setTimeout(updateReservedDatesRecord, 24 * 60 * 60 *1000);
+}
+
+updateReservedDatesRecord()

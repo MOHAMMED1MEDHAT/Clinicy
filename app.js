@@ -12,7 +12,9 @@ const app=express();
 //test---------------
 // console.log(dateCalc.getNextDayApperance("2023-05-2","monday"));
 // console.log(dateCalc.isDateInPast("2023-04-25"));
-// console.log(dateCalc.getUpcomingDatesForMonth("saturday"));
+// console.log(dateCalc.getUpcomingDatesForNUmberOfWeeks(5,dateCalc.getDayNameByDayHistory("2023-04-28"))[3]);
+// const today=new Date().toISOString().substring(0,10);
+// console.log(today)
 // const data={
 //     days:[
 //         "Monday",
@@ -33,7 +35,7 @@ const app=express();
 process.on("uncaughtException",(exception)=>{console.log("uncaught Exception"+exception);});
 process.on("unhandledRejection",(exception)=>{console.log("uncaught async Exception"+exception);});
 
-mongoose.connect(process.env.ATLAS_CONNECTION_STRING,{
+mongoose.connect(process.env.LOCAL_CONNECTION_STRING,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
     dbName:"clinicky"
