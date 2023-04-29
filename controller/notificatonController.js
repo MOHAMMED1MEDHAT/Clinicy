@@ -36,11 +36,12 @@ const jwtSCRT=config.get("env_var.jwtScreteKey")
 
 const getAllPatientNotification=async(req,res)=>{
     try{
+        let customResponseList=[]
         let customResponse={}
         //replcable with /:id of the user
         const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
 
-        const appointment=await Appointment.find({patient:tokenPayload.userId})
+        const appointments=await Appointment.find({patient:tokenPayload.userId})
         .populate({
             path:"clinick",
             select:"-reservedDates -openDates",
@@ -49,17 +50,22 @@ const getAllPatientNotification=async(req,res)=>{
                 select:"name"
             }})
         .exec();
-        console.log(appointment)
+
         const notification=await Notification.find({appointmentId:appointment._id}).exec();
         // setting customResponse values 
-        customResponse.clinicName=appointment.clinick.clinicName;
-        customResponse.doctorName=appointment.clinick.doctor.name;
-        customResponse.sepcialization=appointment.clinick.sepcialization;
-        customResponse.appointmentDate=appointment.appointmentDate;
-        customResponse.bookingTime=appointment.bookingTime;
-        customResponse.typeOfNotification=notification.typeOfNotification;
+        appointments.forEach( appointments=> {
+            
+            customResponse.clinicName=appointment.clinick.clinicName;
+            customResponse.doctorName=appointment.clinick.doctor.name;
+            customResponse.sepcialization=appointment.clinick.sepcialization;
+            customResponse.appointmentDate=appointment.appointmentDate;
+            customResponse.bookingTime=appointment.bookingTime;
+            customResponse.typeOfNotification=notification.typeOfNotification;
+            customResponseList.push(customResponse)
+            customResponse={}
+        });
         
-        console.log(customResponse)
+        console.log(customResponseList)
         if(!notification.length==0){
             return res.status(204).json({message:"no notification"});
         }
