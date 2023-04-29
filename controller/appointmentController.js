@@ -111,7 +111,7 @@ const getAppointmentById=async(req,res)=>{
         })
         .populate({
             path:"clinick",
-            // select:"-_id",
+            select:"-reservedDates -openDates",
             populate:{
                 path:"doctor",
                 select:"name"
