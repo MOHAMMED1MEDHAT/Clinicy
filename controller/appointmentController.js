@@ -232,11 +232,12 @@ const deleteAppointment=async(req,res)=>{
             return res.status(400).json({message:"Invalid appointment id"});
         }
 
+        await UpdateAppointmentDate(false,req.params.appointmentId)
+
         const appointment=await Appointment.findByIdAndDelete(req.params.appointmentId).exec();
         if(!appointment){
             return res.status(400).json({message:"Bad request"});
         }
-        await UpdateAppointmentDate(false,req.params.appointmentId)
         res.status(200).json({message:"appointment was deleted successfully",appointment});
     }catch(err){
         console.log(err);
