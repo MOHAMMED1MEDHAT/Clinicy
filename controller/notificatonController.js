@@ -62,11 +62,12 @@ const getAllPatientNotification=async(req,res)=>{
             const notification=await Notification.find({appointmentId:appointment._id}).exec();
             customResponse.typeOfNotification=notification.typeOfNotification;
             customResponseList.push(customResponse)
+            console.log(customResponse)
             customResponse={}
         });
         
         console.log(customResponseList)
-        if(!customResponseList.length==0){
+        if(customResponseList.length==0){
             return res.status(204).json({message:"no notification"});
         }
         res.status(200).json(customResponseList)
