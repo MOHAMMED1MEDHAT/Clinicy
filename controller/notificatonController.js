@@ -53,7 +53,7 @@ const getAllPatientNotification=async(req,res)=>{
         const notification=await Notification.find({appointmentId:appointment._id}).exec();
 
         //setting customResponse values 
-        customResponse.clinicName=appointment.clinick.clinicname;
+        customResponse.clinicName=appointment.clinick.clinicName;
         customResponse.doctorName=appointment.clinick.doctor.name;
         customResponse.sepcialization=appointment.clinick.sepcialization;
         customResponse.appointmentDate=appointment.appointmentDate;
