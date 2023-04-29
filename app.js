@@ -35,7 +35,7 @@ const app=express();
 process.on("uncaughtException",(exception)=>{console.log("uncaught Exception"+exception);});
 process.on("unhandledRejection",(exception)=>{console.log("uncaught async Exception"+exception);});
 
-mongoose.connect(process.env.LOCAL_CONNECTION_STRING,{
+mongoose.connect(process.env.ATLAS_CONNECTION_STRING,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
     dbName:"clinicky"
