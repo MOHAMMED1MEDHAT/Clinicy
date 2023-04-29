@@ -66,10 +66,10 @@ const getAllPatientNotification=async(req,res)=>{
         });
         
         console.log(customResponseList)
-        if(!notification.length==0){
+        if(!customResponseList.length==0){
             return res.status(204).json({message:"no notification"});
         }
-        res.status(200).json(customResponse)
+        res.status(200).json(customResponseList)
 
     }catch(err){
         console.log(err);
