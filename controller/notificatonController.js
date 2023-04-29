@@ -51,7 +51,8 @@ const getAllPatientNotification=async(req,res)=>{
         .exec();
 
         const notification=await Notification.find({appointmentId:appointment._id}).exec();
-        if(notification.length==0){
+        console.log(customResponse)
+        if(!notification.length==0){
             return res.status(204).json({message:"no notification"});
         }
         // setting customResponse values 
@@ -62,7 +63,6 @@ const getAllPatientNotification=async(req,res)=>{
         customResponse.bookingTime=appointment.bookingTime;
         customResponse.typeOfNotification=notification.typeOfNotification;
         
-        console.log(customResponse)
         res.status(200).json(customResponse)
 
     }catch(err){
