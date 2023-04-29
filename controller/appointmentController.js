@@ -1,4 +1,5 @@
 const Appointment=require("../models/appointmentModel");
+const Notification=require("../controller/notificatonController");
 const Clinic=require("../models/clinickModule");
 const ReservedDate=require("../models/reservedDatesModel");
 const dateCalc=require("../util/dateCalculations");
@@ -148,15 +149,8 @@ const addAppointment=async(req,res)=>{
 
         //Update appointmentDate to dates entity and clinic entity
         await UpdateAppointmentDate(true,appointment._id)
-        // const {day,time}=dateCalc.extractDayNumberAndTime(appointmentDate);
-        // const clkTime=await Clinic.findById(appointment.clinick).exec();
-        // const idxOfTime=clkTime.openDates.time.indexOf(time);
-        // const resDate=await ReservedDate.findOne({clinicId:appointment.clinick,day}).exec()
-        // const timeUpdated=resDate.time
-        // timeUpdated[idxOfTime]=true;
-        // const reservedDate=await ReservedDate.findOneAndUpdate({clinicId:appointment.clinick,day},{
-        //     time:timeUpdated
-        // }).exec();
+
+        await Notification.addNotification(appointment._id)
 
         res.status(200).json({message:"appointment was saved successfully",appointment});
 
@@ -191,7 +185,7 @@ const updateAppointmentByPatient=async(req,res)=>{
         if(!appointment){
             return res.status(400).json({message:"Bad request"});
         }
-        if(appointment.status.toUppperCase()==="CANCELED"){
+        if(appointment.status==="CANCELED"){
             await UpdateAppointmentDate(false,appointment._id)
 
         }else{

@@ -23,4 +23,4 @@ notificationSchema.set('toJSON',{
     virtuals:true
 })
 
-module.exports =mongoose.model("appointments", notificationSchema);
+module.exports =mongoose.model("notifications", notificationSchema);

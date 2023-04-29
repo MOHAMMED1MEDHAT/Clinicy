@@ -64,6 +64,7 @@ const userRouter=require("./routes/user")
 const authRouter=require("./routes/auth")
 const searchRouter=require("./routes/search")
 const profileRouter=require("./routes/profile")
+const notificationRouter=require("./routes/notification")
 // const mainPageRouter=require("./routes/mainpage")
 const appointmentRouter=require("./routes/appointment")
 const clinickRouter=require("./routes/clinick")
@@ -75,6 +76,7 @@ app.use("/api/profile",profileRouter);//test done
 // app.use("/api/mainPage",mainPageRouter);
 app.use("/api/appointments",appointmentRouter);
 app.use("/api/clinicks",clinickRouter);//test done
+app.use("/api/notification",notificationRouter);//test done
 
 const port=process.env.PORT||4000;
 app.listen(port,()=>{
