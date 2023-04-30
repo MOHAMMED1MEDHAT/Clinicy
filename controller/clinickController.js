@@ -8,7 +8,7 @@ const { default: mongoose } = require("mongoose");
 const { time } = require("console");
 const jwtSCRT=config.get("env_var.jwtScreteKey")
 
-
+ 
 //with doctorId as params
 // const getAllClinicks=async(req,res)=>{
 //     try{

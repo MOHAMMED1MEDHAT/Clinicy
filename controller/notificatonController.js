@@ -4,6 +4,7 @@ const Appointment=require("../models/appointmentModel");
 const jwt =require("jsonwebtoken");
 const config=require("config");
 const { default: mongoose } = require("mongoose");
+const { not } = require("ajv/dist/compile/codegen");
 const jwtSCRT=config.get("env_var.jwtScreteKey")
 
 //with doctorId from jwt
@@ -52,21 +53,23 @@ const getAllPatientNotification=async(req,res)=>{
         .exec();
 
         // setting customResponse values 
-        appointments.forEach(async appointment=> {
-            
-            customResponse.clinicName=appointment.clinick.clinicName;
-            customResponse.doctorName=appointment.clinick.doctor.name;
-            customResponse.sepcialization=appointment.clinick.sepcialization;
-            customResponse.appointmentDate=appointment.appointmentDate;
-            customResponse.bookingTime=appointment.bookingTime;
-            const notification=await Notification.find({appointmentId:appointment._id}).exec();
+        for (let i = 0; i < appointments.length; i++) {
+            // console.log(appointment)
+            const notification=await Notification.findOne({appointmentId:appointments[i]._id}).exec();
+            customResponse.clinicName=appointments[i].clinick.clinicName;
+            customResponse.doctorName=appointments[i].clinick.doctor.name;
+            customResponse.sepcialization=appointments[i].clinick.specialization;
+            customResponse.appointmentDate=appointments[i].appointmentDate;
+            customResponse.bookingTime=appointments[i].bookingTime;
             customResponse.typeOfNotification=notification.typeOfNotification;
             customResponseList.push(customResponse)
-            console.log(customResponse)
             customResponse={}
-        });
-        
+        };
+        // const notifications=await Notification.findOne({appointmentId:appointment._id}).exec();
+
         console.log(customResponseList)
+        
+        console.log(customResponseList.length)
         if(customResponseList.length==0){
             return res.status(204).json({message:"no notification"});
         }
