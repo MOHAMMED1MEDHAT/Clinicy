@@ -1,14 +1,14 @@
-const Clinick=require("../models/clinickModule");
-const ResDates=require("../models/reservedDatesModel");
-const dateCalc=require("../util/dateCalculations");
+const Clinick = require("../models/clinickModule");
+const ResDates = require("../models/reservedDatesModel");
+const dateCalc = require("../util/dateCalculations");
 
-const jwt =require("jsonwebtoken");
-const config=require("config");
+const moment = require("moment-timezone");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 const { default: mongoose } = require("mongoose");
 const { time } = require("console");
-const jwtSCRT=config.get("env_var.jwtScreteKey")
+const jwtSCRT = config.get("env_var.jwtScreteKey");
 
- 
 //with doctorId as params
 // const getAllClinicks=async(req,res)=>{
 //     try{
@@ -24,73 +24,86 @@ const jwtSCRT=config.get("env_var.jwtScreteKey")
 // }
 
 //with doctorId from jwt
-const getAllClinicks=async(req,res)=>{
-    try{
+const getAllClinicks = async (req, res) => {
+    try {
         //replcable with /:id of the user
-        const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
-        if(tokenPayload.userType.toUpperCase()==="DOCTOR"){
-            let clinicks=await Clinick.find({doctor:tokenPayload.userId})
-            .select(" -doctor -reservedDates")
-            .exec();
-            if(clinicks.length==0){
-                return res.status(204).json({message:"No clinick was added yet"});
+        const tokenPayload = jwt.verify(req.header("x-auth-token"), jwtSCRT);
+        if (tokenPayload.userType.toUpperCase() === "DOCTOR") {
+            let clinicks = await Clinick.find({ doctor: tokenPayload.userId })
+                .select(" -doctor -reservedDates")
+                .exec();
+            if (clinicks.length == 0) {
+                return res
+                    .status(204)
+                    .json({ message: "No clinick was added yet" });
             }
             res.status(200).json(clinicks);
-        }else{
-            return res.status(401).json({message:"UNAUTHORIZED ACTION"})
+        } else {
+            return res.status(401).json({ message: "UNAUTHORIZED ACTION" });
         }
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({message:"Internal server error"});
-    }
-}
-
-const getClinickById=async(req,res)=>{
-    try{
-        //id validation
-        if(!mongoose.isValidObjectId(req.params.id)){
-            return res.status(400).json({message:"Invalid clinic id"});
-        }
-
-        const clinicBefore=await Clinick.findById(req.params.id);
-
-        const resDate=await ResDates.find({clinicId:req.params.id})
-        .select("-_id day time")
-        .exec();
-
-        console.log(resDate)
-
-        const clkReservedDates=await Clinick.findByIdAndUpdate(req.params.id,{
-            reservedDates:resDate
-        }).exec();
-
-        const clinick=await Clinick.findById(req.params.id)
-        .populate({
-            path:"doctor",
-            select:"name"
-        })
-        // .select("-_id -__v")
-        .exec();
-        if(!clinick){
-            return res.status(400).json({message:"Bad request"});
-        }
-        res.status(200).json(clinick);
-
-    }catch(err){
-        console.log(err);
-        res.status(500).json({message:"Internal server error"});
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 
-const addClinick=async(req,res)=>{
-    try{
+const getClinickById = async (req, res) => {
+    try {
+        //id validation
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: "Invalid clinic id" });
+        }
+
+        const clinicBefore = await Clinick.findById(req.params.id);
+
+        const resDate = await ResDates.find({ clinicId: req.params.id })
+            .select("-_id day time")
+            .exec();
+
+        console.log(resDate);
+
+        const clkReservedDates = await Clinick.findByIdAndUpdate(
+            req.params.id,
+            {
+                reservedDates: resDate,
+            }
+        ).exec();
+
+        const clinick = await Clinick.findById(req.params.id)
+            .populate({
+                path: "doctor",
+                select: "name",
+            })
+            // .select("-_id -__v")
+            .exec();
+        if (!clinick) {
+            return res.status(400).json({ message: "Bad request" });
+        }
+        res.status(200).json(clinick);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+const addClinick = async (req, res) => {
+    try {
         //replcable with /:id of the user
-        const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
+        const tokenPayload = jwt.verify(req.header("x-auth-token"), jwtSCRT);
 
-        const {phone,clinicName,location,specialization,price,openDates,rating,about}=req.body;
+        const {
+            phone,
+            clinicName,
+            location,
+            specialization,
+            price,
+            openDates,
+            rating,
+            about,
+        } = req.body;
 
-        let clinick=new Clinick({
-            doctor:tokenPayload.userId,
+        let clinick = new Clinick({
+            doctor: tokenPayload.userId,
             clinicName,
             phone,
             location,
@@ -98,65 +111,69 @@ const addClinick=async(req,res)=>{
             price,
             openDates,
             rating,
-            about
+            about,
         });
         await clinick.save();
-        await createReservedDatesRecord(clinick._id,clinick.openDates);
-
-
+        await createReservedDatesRecord(clinick._id, clinick.openDates);
 
         res.status(200).json(clinick);
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({message:"Internal server error"});
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 
-const updateClinick=async(req,res)=>{
-    try{
+const updateClinick = async (req, res) => {
+    try {
         //id validation
-        if(!mongoose.isValidObjectId(req.params.id)){
-            return res.status(400).json({message:"Invalid clinic id"});
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: "Invalid clinic id" });
         }
-        const {phone,location,specialization,price,openDates}=req.body;
+        const { phone, location, specialization, price, openDates } = req.body;
 
-        const clinick=await Clinick.findByIdAndUpdate(req.params.id,{
-            phone,
-            location,
-            specialization,
-            price,
-            openDates,
-        },{returnOriginal:false}).exec();
-        if(!clinick){
+        const clinick = await Clinick.findByIdAndUpdate(
+            req.params.id,
+            {
+                phone,
+                location,
+                specialization,
+                price,
+                openDates,
+            },
+            { returnOriginal: false }
+        ).exec();
+        if (!clinick) {
             return res.status(400).send("Bad reqest");
         }
         res.status(200).json(clinick);
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({message:"Internal server error"})
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 
-
-const deletClinick=async(req,res)=>{
-    try{
+const deletClinick = async (req, res) => {
+    try {
         //id validation
-        if(!mongoose.isValidObjectId(req.params.id)){
-            return res.status(400).json({message:"Invalid clinic id"});
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: "Invalid clinic id" });
         }
 
-        const clinick=await Clinick.findByIdAndDelete(req.params.id).exec();
-        if(!clinick){
-            return res.status(400).json({message:"Bad request"});
+        const clinick = await Clinick.findByIdAndDelete(req.params.id).exec();
+        if (!clinick) {
+            return res.status(400).json({ message: "Bad request" });
         }
-        res.status(200).json({message:"Clinick was deleted successfully",clinick});
-    }catch(err){
+        res.status(200).json({
+            message: "Clinick was deleted successfully",
+            clinick,
+        });
+    } catch (err) {
         console.log(err);
-        res.status(500).json({message:"Internal server error"});
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 
-module.exports={
+module.exports = {
     getAllClinicks,
     getClinickById,
     addClinick,
@@ -164,66 +181,76 @@ module.exports={
     deletClinick,
 };
 
-
-const createReservedDatesRecord=async(clinicId,dates)=>{
-    const {days,time}=dates
+const createReservedDatesRecord = async (clinicId, dates) => {
+    const { days, time } = dates;
     //test--------
-    console.log(days,time);
+    console.log(days, time);
     //-------------------------------
 
-    let times=[]
-    for(let i=0;i<time.length;i++){
-        times.push(false)
+    let times = [];
+    for (let i = 0; i < time.length; i++) {
+        times.push(false);
     }
-    let upcomingDays=[]
-    days.forEach(day=> {
-        upcomingDays.push(dateCalc.getUpcomingDatesForNUmberOfWeeks(5,day.toLowerCase()));
+    let upcomingDays = [];
+    days.forEach((day) => {
+        upcomingDays.push(
+            dateCalc.getUpcomingDatesForNUmberOfWeeks(5, day.toLowerCase())
+        );
     });
     //test-----------------
-    console.log(upcomingDays)
+    console.log(upcomingDays);
     //----------------------------
-    upcomingDays.forEach(async days=>{
-        days.forEach(async day=>{
-            let datesRecord=new ResDates({
+    upcomingDays.forEach(async (days) => {
+        days.forEach(async (day) => {
+            let datesRecord = new ResDates({
                 clinicId,
                 day,
-                time:times,
-            })
+                time: times,
+            });
             await datesRecord.save();
             console.log("Dates Saved successfully");
-        })
-    })
+        });
+    });
+};
 
-}
+//This function will check for all dates that have been passed,
+//clean the db and update with the new date
+async function updateReservedDatesRecord() {
+    const today = new Date().toISOString().substring(0, 10);
+    const cairoTimezone = "Africa/Cairo";
+    const currentDate = moment().tz(cairoTimezone).format("YYYY-MM-DD");
+    console.log(currentDate);
 
-//This function will check for all dates that have been passed, 
-//clean the db and update with the new date 
-async function updateReservedDatesRecord(){
-    const today=new Date().toISOString().substring(0,10);
-    const passedDates=await ResDates.find({ day: { $lt: today } }).exec();
+    const passedDates = await ResDates.find({
+        day: { $lt: currentDate },
+    }).exec();
 
-    if(!passedDates.length==0){
-        passedDates.forEach(async date=>{
-            let times=[]
-            date.time.forEach(t=>{
-                times.push(false)
-            })
-            let NewDatesRecord=new ResDates({
-                clinicId:date.clinicId,
-                day:dateCalc.getUpcomingDatesForNUmberOfWeeks(5,dateCalc.getDayNameByDayHistory(date.day))[3],
-                time:times,
-            })
+    if (!passedDates.length == 0) {
+        passedDates.forEach(async (date) => {
+            let times = [];
+            date.time.forEach((t) => {
+                times.push(false);
+            });
+            let NewDatesRecord = new ResDates({
+                clinicId: date.clinicId,
+                day: dateCalc.getUpcomingDatesForNUmberOfWeeks(
+                    5,
+                    dateCalc.getDayNameByDayHistory(date.day)
+                )[3],
+                time: times,
+            });
             await NewDatesRecord.save();
-            console.log("Dates added successfully",NewDatesRecord);
-    
-            const oldDateRecord= await ResDates.findByIdAndDelete(date._id).exec();
-            console.log("Date deleted successfully",oldDateRecord);
+            console.log("Dates added successfully", NewDatesRecord);
 
-        })
-    }else{
-        console.log("no dates is passed",passedDates);
+            const oldDateRecord = await ResDates.findByIdAndDelete(
+                date._id
+            ).exec();
+            console.log("Date deleted successfully", oldDateRecord);
+        });
+    } else {
+        console.log("no dates is passed", passedDates);
     }
-    setTimeout(updateReservedDatesRecord, 24 * 60 * 60 *1000);
+    setTimeout(updateReservedDatesRecord, 24 * 60 * 60 * 1000);
 }
 
-updateReservedDatesRecord()
+updateReservedDatesRecord();
