@@ -1,10 +1,10 @@
-const validator=require("../util/clinickValidator");
+const validator = require("../util/clinickValidator");
 
-module.exports=(req,res,nxt)=>{
-    let valid=validator(req.body);
-    if(valid){
+module.exports = (req, res, nxt) => {
+    let valid = validator(req.body);
+    if (valid) {
         nxt();
-    }else{
+    } else {
         res.status(403).send("forbidden comand");
     }
-}
+};

@@ -1,23 +1,22 @@
-const Ajv=require('ajv');
-const ajv=new Ajv();
+const Ajv = require("ajv");
+const ajv = new Ajv();
 
-const schema={
-    "type":"object",
-    "properties":{
-        "name":{
-            "type":"string",
+const schema = {
+    type: "object",
+    properties: {
+        name: {
+            type: "string",
             // "pattern":"^[A-Z][a-z]*$"
         },
-        "email":{
-            "type":"string",
-            "pattern":".+\@.+\.."
+        email: {
+            type: "string",
+            pattern: ".+@.+..",
         },
-        "imageUrl":{
-            "type":"string"
-        }
+        imageUrl: {
+            type: "string",
+        },
     },
-    "required":["name","imageUrl"]
-}
+    required: ["name", "imageUrl"],
+};
 
-
-module.exports=ajv.compile(schema);
+module.exports = ajv.compile(schema);

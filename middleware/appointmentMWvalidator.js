@@ -1,12 +1,12 @@
-const validator=require("../util/appointmentValidator");
+const validator = require("../util/appointmentValidator");
 
-module.exports=(req,res,nxt)=>{
-    let valid=validator(req.body);
-    if(valid){
+module.exports = (req, res, nxt) => {
+    let valid = validator(req.body);
+    if (valid) {
         nxt();
-    }else{
+    } else {
         //test-----
         console.log(req.body);
         res.status(403).send("forbidden comand");
     }
-}
+};

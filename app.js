@@ -47,7 +47,7 @@ process.on("unhandledRejection", (exception) => {
 });
 
 mongoose
-    .connect(process.env.ATLAS_CONNECTION_STRING, {
+    .connect(process.env.LOCAL_CONNECTION_STRING, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         dbName: "clinicky",
@@ -89,7 +89,7 @@ app.use("/api/user", authRouter); //test done
 app.use("/api/search", searchRouter); //test done
 app.use("/api/profile", profileRouter); //test done
 // app.use("/api/mainPage",mainPageRouter);
-app.use("/api/appointments", appointmentRouter);
+app.use("/api/appointments", appointmentRouter); // test done
 app.use("/api/clinicks", clinickRouter); //test done
 app.use("/api/notification", notificationRouter); //test done
 
@@ -101,4 +101,5 @@ app.listen(port, () => {
 /*TODO:
 1- secure the api using the express jwt package and the jwt helper module --->(Done)
 2- patient id in the clinic recored must be checked to be a patient or a doctoer ---> (Done)
+3- Special clinics Adding for employees 
 */
