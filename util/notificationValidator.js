@@ -1,22 +1,21 @@
-const Ajv=require('ajv');
-const ajv=new Ajv();
+const Ajv = require("ajv");
+const ajv = new Ajv();
 
-const schema={
-    "type":"object",
-    "properties":{
+const schema = {
+    type: "object",
+    properties: {
         // "patient":{
         //     "type":"string",
         //     // "pattern":"^[A-Z][a-z]*$"
         // },
-        "appointmentId":{
-            "type":"string",
+        appointmentId: {
+            type: "string",
         },
-        "typeOfNotification":{
-            "type":"string",
+        typeOfNotification: {
+            type: "string",
         },
     },
-    "required":["appointmentId","typeOfNotification"]
-}
+    required: ["appointmentId", "typeOfNotification"],
+};
 
-
-module.exports=ajv.compile(schema);
+module.exports = ajv.compile(schema);

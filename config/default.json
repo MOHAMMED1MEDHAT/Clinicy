@@ -1,5 +1,5 @@
 {
-    "env_var":{
-        "jwtScreteKey":"thisthesecrettokenkey"
+    "env_var": {
+        "jwtScreteKey": "thisthesecrettokenkey"
     }
 }

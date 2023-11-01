@@ -1,15 +1,15 @@
-const validator=require("../util/authValidator");
+const validator = require("../util/authValidator");
 
-module.exports=(req,res,nxt)=>{
+module.exports = (req, res, nxt) => {
     //test--------
     console.log(req.body);
-    let valid=validator(req.body);
-    if(valid){
+    let valid = validator(req.body);
+    if (valid) {
         nxt();
-    }else{
+    } else {
         //test-------
-        console.log(req.body)
+        console.log(req.body);
         //-----------
         res.status(403).send("forbidden comand");
     }
-}
+};
