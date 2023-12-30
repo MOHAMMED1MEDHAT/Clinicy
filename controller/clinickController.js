@@ -195,8 +195,13 @@ const createReservedDatesRecord = async (clinicId, dates) => {
     let isReserved = false;
     appointments.forEach((appointment) => {
       appointment.time = appointment.appointmentDate.split(' ')[1];
-      if (appointment.time == time) {
-        isReserved = true;
+      if (
+        appointment.status == 'PENDING' ||
+        appointment.status == 'COMPLETED'
+      ) {
+        if (appointment.time == time) {
+          isReserved = true;
+        }
       }
     });
     return isReserved;
