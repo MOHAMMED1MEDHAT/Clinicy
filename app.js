@@ -66,6 +66,11 @@ mongoose
 //     next();
 // });
 
+//for testing the server
+app.head('/api/v1/monitor', (req, res) => {
+  res.status(200).end();
+});
+
 //middlewares
 app.use(cors());
 app.options('*', cors);
