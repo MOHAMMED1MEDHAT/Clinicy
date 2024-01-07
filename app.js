@@ -47,8 +47,8 @@ process.on('unhandledRejection', (exception) => {
 });
 
 mongoose
-  // .connect(process.env.ATLAS_CONNECTION_STRING, {
-  .connect(process.env.LOCAL_CONNECTION_STRING, {
+  .connect(process.env.ATLAS_CONNECTION_STRING, {
+    // .connect(process.env.LOCAL_CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     dbName: 'clinicky',
