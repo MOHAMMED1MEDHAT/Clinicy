@@ -71,6 +71,10 @@ app.get('/api/v1/monitor', (req, res) => {
   res.status(200).end();
 });
 
+app.head('/api/v1/checky', (req, res) => {
+  res.status(200).end();
+});
+
 //middlewares
 app.use(cors());
 app.options('*', cors);
