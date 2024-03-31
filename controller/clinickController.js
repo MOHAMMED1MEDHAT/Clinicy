@@ -10,19 +10,19 @@ const { default: mongoose } = require('mongoose');
 // const { time } = require('console');
 const jwtSCRT = config.get('env_var.jwtScreteKey');
 
-//with doctorId as params
-// const getAllClinicks=async(req,res)=>{
-//     try{
-//         let clinicks=await Clinick.find({doctor:req.params.doctorId}).exec();
-//         if(clinicks.length==0){
-//             return res.status(200).json({message:"No clinick was added yet"});
-//         }
-//         res.status(200).json({clinicks});
-//     }catch(err){
-//         console.log(err);
-//         res.status(500).json({message:"Internal server error"});
-//     }
-// }
+// with doctorId as params
+const getAllClinic=async(req,res)=>{
+    try{
+        let clinics=await Clinic.find({doctor:req.params.doctorId}).exec();
+        if(clinics.length==0){
+            return res.status(200).json({message:"No clinic was added yet"});
+        }
+        res.status(200).json({clinics});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({message:"Internal server error"});
+    }
+}
 
 //with doctorId from jwt
 const getAllClinicks = async (req, res) => {
