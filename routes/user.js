@@ -22,13 +22,13 @@ router.post("/", validator, async (req, res) => {
             }
 
             const salt = await bcrypt.genSalt(10);
-            const hashedPswrd = await bcrypt.hash(req.body.password, salt);
+            const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
             let patient = new Patient({
                 name: req.body.name,
                 email: req.body.email,
                 image: req.body.imageUrl,
-                password: hashedPswrd,
+                password: hashedPassword,
                 gender: req.body.gender,
                 type: req.body.type,
             });
@@ -47,13 +47,13 @@ router.post("/", validator, async (req, res) => {
                     .json({ message: "email already exists as a doctor ..." });
             }
             const salt = await bcrypt.genSalt(10);
-            const hashedPswrd = await bcrypt.hash(req.body.password, salt);
+            const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
             let doctor = new Doctor({
                 name: req.body.name,
                 email: req.body.email,
                 image: req.body.imageUrl,
-                password: hashedPswrd,
+                password: hashedPassword,
                 specialization: req.body.specialization,
                 gender: req.body.gender,
                 type: req.body.type,
