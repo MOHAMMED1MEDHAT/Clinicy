@@ -1,7 +1,7 @@
 const Doctor = require("../models/doctorModel");
 const Clinic = require("../models/clinickModule");
 
-const searchUsingSpecializtion = async (req, res) => {
+const searchUsingSpecialization = async (req, res) => {
     const { specialization } = req.query;
     //test------
     // console.log(doctorName,specialization)
@@ -32,7 +32,7 @@ const searchUsingSpecializtion = async (req, res) => {
     }
 };
 
-const searchUsingDoctorname = async (req, res) => {
+const searchUsingDoctorName = async (req, res) => {
     try {
         const { name } = req.query;
         const regex = new RegExp(`\\b${name}\w*`, "g");
@@ -67,6 +67,6 @@ const searchUsingDoctorname = async (req, res) => {
 };
 
 module.exports = {
-    searchUsingSpecializtion,
-    searchUsingDoctorname,
+    searchUsingSpecialization,
+    searchUsingDoctorName,
 };
