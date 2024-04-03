@@ -3,7 +3,6 @@ const notification = require("../controller/notificatonController");
 
 const router = require("express").Router();
 
-// router.get("/all/:doctorId",clinick.getAllClinicks)
 router.get("/patient/", notification.getAllPatientNotification);
 
 // router.get("doctor/",notification.getAllDoctorNotification)
