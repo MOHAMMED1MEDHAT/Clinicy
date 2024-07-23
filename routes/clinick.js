@@ -1,17 +1,17 @@
 const validator = require("../middleware/clinickMWvalidator");
-const clinick = require("../controller/clinickController");
+const clinic = require("../controller/clinickController");
 
 const router = require("express").Router();
 
-// router.get("/all/:doctorId",clinick.getAllClinicks)
-router.get("/", clinick.getAllClinicks);
+// router.get("/all/:doctorId",clinic.getAllClinicks)
+router.get("/", clinic.getAllClinics);
 
-router.get("/:id", clinick.getClinickById);
+router.get("/:id", clinic.getClinicById);
 
-router.post("/", validator, clinick.addClinick);
+router.post("/", validator, clinic.addClinic);
 
-router.put("/:id", validator, clinick.updateClinick);
+router.put("/:id", validator, clinic.updateClinic);
 
-router.delete("/:id", clinick.deletClinick);
+router.delete("/:id", clinic.deletClinic);
 
 module.exports = router;

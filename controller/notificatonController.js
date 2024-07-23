@@ -8,34 +8,6 @@ const { not } = require("ajv/dist/compile/codegen");
 const { getCiphers } = require("crypto");
 const jwtSCRT = config.get("env_var.jwtScreteKey");
 
-//with doctorId from jwt
-// const getAllDoctorNotification=async(req,res)=>{
-//     try{
-//         let customResponse={}
-//         //replcable with /:id of the user
-//         const tokenPayload=jwt.verify(req.header("x-auth-token"),jwtSCRT);
-
-//         const appointment=await Appointment.find()
-//         .populate({
-//             path:"patient",
-//             // select:"-_id"
-//         })
-//         .populate({
-//             path:"clinick",
-//             select:"-reservedDates -openDates",
-//             populate:{
-//                 path:"doctor",
-//                 match:""
-//                 select:"name"
-//             }}).exec();
-
-//         res.status(200).json(clinicks);
-//     }catch(err){
-//         console.log(err);
-//         res.status(500).json({message:"Internal server error"});
-//     }
-// }
-
 const getAllPatientNotification = async (req, res) => {
     try {
         //replcable with /:id of the user
