@@ -10,7 +10,6 @@ const jwtSCRT = config.get("env_var.jwtScreteKey");
 
 const getAllPatientNotification = async (req, res) => {
     try {
-        //replcable with /:id of the user
         const tokenPayload = jwt.verify(req.header("x-auth-token"), jwtSCRT);
 
         const appointments = await Appointment.find({
