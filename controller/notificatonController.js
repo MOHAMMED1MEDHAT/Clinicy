@@ -24,16 +24,7 @@ const getAllPatientNotification = async (req, res) => {
                 },
             })
             .exec();
-
-        // setting customResponse
-        //test---------------------------------
-        // console.log(appointments.map((appointment)=>{
-        //     return appointment.appointmentDate
-        // }))
-        // const notifications=await Notification.findOne({appointmentId:appointment._id}).exec();
-        // console.log(customResponseList)
-        // console.log(customResponseList.length)
-        //test---------------------------------
+        
         const customResponseList = await getNotificationByAppointmentId(
             appointments
         );
