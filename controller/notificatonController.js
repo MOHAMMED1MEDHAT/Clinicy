@@ -54,7 +54,6 @@ const addNotification = async (appointmentId) => {
 
 const deleteNotification = async (req, res) => {
     try {
-        //id validation
         if (!mongoose.isValidObjectId(req.params.id)) {
             return res.status(400).json({ message: "Invalid clinic id" });
         }
@@ -66,7 +65,7 @@ const deleteNotification = async (req, res) => {
             return res.status(400).json({ message: "Bad request" });
         }
         res.status(200).json({
-            message: "Clinick was deleted successfully",
+            message: "Clinic was deleted successfully",
             notification,
         });
     } catch (err) {
