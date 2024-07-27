@@ -85,9 +85,6 @@ const getNotificationByAppointmentId = async (appointments) => {
     let customResponseList = [];
     let customResponse = {};
     for (let i = 0; i < appointments.length; i++) {
-        //test-----------------------------
-        // console.log(appointment)
-        //test-----------------------------
         const notification = await Notification.findOne({
             appointmentId: appointments[i]._id,
         }).exec();
