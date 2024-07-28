@@ -11,7 +11,6 @@ const { log } = require('console');
 const jwtSCRT = config.get('env_var.jwtScreteKey');
 
 const getAllAppointments = async (req, res) => {
-  //replcable with /:id of the uesr
   try {
     const appointments = await Appointment.find({})
       .populate({
@@ -24,7 +23,6 @@ const getAllAppointments = async (req, res) => {
         populate: {
           path: 'doctor',
           select: 'name ',
-          // }}).select("-_id -__v")
         },
       })
       .exec();
