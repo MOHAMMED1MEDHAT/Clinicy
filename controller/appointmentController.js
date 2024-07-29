@@ -37,7 +37,6 @@ const getAllAppointments = async (req, res) => {
 };
 
 const getAllPatientAppointments = async (req, res) => {
-  //replcable with /:id of the uesr
   const tokenPayload = jwt.verify(req.header('x-auth-token'), jwtSCRT);
   try {
     const appointments = await Appointment.find({
@@ -45,7 +44,6 @@ const getAllPatientAppointments = async (req, res) => {
     })
       .populate({
         path: 'patient',
-        // select:"-_id"
       })
       .populate({
         path: 'clinick',
