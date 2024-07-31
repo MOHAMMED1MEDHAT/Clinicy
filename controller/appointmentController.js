@@ -87,7 +87,6 @@ const getAllClinickAppointmentsByClinickId = async (req, res) => {
           select: 'name',
         },
       })
-      // .select("-_id -__v")
       .exec();
     if (appointments.length == 0) {
       return res.status(204).json({ message: 'No appointments was added yet' });
@@ -100,7 +99,6 @@ const getAllClinickAppointmentsByClinickId = async (req, res) => {
 };
 const getAppointmentById = async (req, res) => {
   try {
-    //id validation
     if (!mongoose.isValidObjectId(req.params.appointmentId)) {
       return res.status(400).json({ message: 'Invalid appointment id' });
     }
