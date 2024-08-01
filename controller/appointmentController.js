@@ -106,7 +106,6 @@ const getAppointmentById = async (req, res) => {
     const appointment = await Appointment.findById(req.params.appointmentId)
       .populate({
         path: 'patient',
-        // select:"-_id"
       })
       .populate({
         path: 'clinick',
@@ -117,7 +116,6 @@ const getAppointmentById = async (req, res) => {
         },
       })
       .exec();
-    // }).select("-_id -__v").exec();
     if (!appointment) {
       return res.status(400).json({ message: 'Invalid appointment id' });
     }
