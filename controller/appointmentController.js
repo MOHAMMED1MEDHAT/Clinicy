@@ -128,7 +128,6 @@ const getAppointmentById = async (req, res) => {
 
 const addAppointment = async (req, res) => {
   try {
-    //replcable with /:id of the uesr
     const tokenPayload = jwt.verify(req.header('x-auth-token'), jwtSCRT);
     const { clinick, appointmentDate, bookingTime, status } = req.body;
     const clinic = await Clinic.findById(clinick).exec();
