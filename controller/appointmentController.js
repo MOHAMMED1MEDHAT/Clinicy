@@ -144,7 +144,6 @@ const addAppointment = async (req, res) => {
     });
     await appointment.save();
 
-    //Update appointmentDate to dates entity and clinic entity
     await UpdateAppointmentDate(true, appointment._id);
 
     await Notification.addNotification(appointment._id);
