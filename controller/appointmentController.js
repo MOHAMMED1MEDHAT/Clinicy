@@ -160,7 +160,6 @@ const addAppointment = async (req, res) => {
 
 const updateAppointmentByPatient = async (req, res) => {
   try {
-    //id validation
     if (!mongoose.isValidObjectId(req.params.appointmentId)) {
       return res.status(400).json({ message: 'Invalid appointment id' });
     }
