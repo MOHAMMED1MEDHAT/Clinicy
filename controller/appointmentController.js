@@ -7,6 +7,7 @@ const dateCalc = require('../util/dateCalculations');
 const { default: mongoose } = require('mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const { log } = require('console');
 const jwtSCRT = config.get('env_var.jwtScreteKey');
 
 const getAllAppointments = async (req, res) => {
@@ -291,8 +292,8 @@ const UpdateAppointmentDate = async (flag, appointmentId) => {
     clinicId: appointment.clinick,
     day,
   }).exec();
-  const timeUpdated = resDate.time;
-
+  const timeUpdated = resDate?.time;
+  log('timeUpdated', timeUpdated,resDate);
   //set the reserved dates to the flag
   timeUpdated[idxOfTime] = flag;
 
