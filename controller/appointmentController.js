@@ -286,7 +286,6 @@ const UpdateAppointmentDate = async (flag, appointmentId) => {
 
   //get the time which the appointment is signed to in the clinic
   const idxOfTime = clkTime.openDates.time.indexOf(time);
-
   //get the reserved dates to update it
   const resDate = await ReservedDate.findOne({
     clinicId: appointment.clinick,
@@ -294,7 +293,7 @@ const UpdateAppointmentDate = async (flag, appointmentId) => {
   }).exec();
   
   const timeUpdated = resDate?.time;
-  log('timeUpdated', timeUpdated,resDate);
+  log('timeUpdated', timeUpdated,resDate,appointment.clinick,day,time);
   //set the reserved dates to the flag
   timeUpdated[idxOfTime] = flag;
 
