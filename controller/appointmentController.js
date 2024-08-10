@@ -292,6 +292,7 @@ const UpdateAppointmentDate = async (flag, appointmentId) => {
     clinicId: appointment.clinick,
     day,
   }).exec();
+  
   const timeUpdated = resDate?.time;
   log('timeUpdated', timeUpdated,resDate);
   //set the reserved dates to the flag
